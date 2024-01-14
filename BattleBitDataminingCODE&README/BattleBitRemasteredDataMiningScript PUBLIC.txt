@@ -149,19 +149,26 @@ namespace DataminingScript
         static void Main(string[] args)
         {
             var ExecutionTime = System.Diagnostics.Stopwatch.StartNew();  //Starts the timer for how long program took
-
+	    
+	     //Replace paths below
+	
             string Monobehaviour_Location = @"C:\Users\AUTHOR\Desktop\BBR Ripperino\BattleBit\ExportedProject\Assets\MonoBehaviour\"; //...\BattleBit\ExportedProject\Assets\MonoBehaviour\"
             string PrefabInstance_Location = @"C:\Users\AUTHOR\Desktop\BBR Ripperino\BattleBit\ExportedProject\Assets\PrefabInstance\"; // ...\BattleBit\ExportedProject\Assets\PrefabInstance\"
             string AnimationClip_Location = @"C:\Users\AUTHOR\Desktop\BBR Ripperino\BattleBit\ExportedProject\Assets\AnimationClip\"; // ...\BattleBit\ExportedProject\Assets\AnimationClip\"
             string CSV_Location = @"C:\Users\AUTHOR\Desktop\BBR Ripperino\CSV_CREATIONS\"; // ...\"Where you want your CSV files written in"
 
-	    string Number_Regex = @"[+-]?([0-9]*[.])?[0-9]+";
+            string Number_Regex = @"[+-]?([0-9]*[.])?[0-9]+";
             string Name_Regex = @"(?<=m_Name:\s).+";
             string MagazineName_Regex = @"(?<=MagName:\s).+";
             string GUID_Regex = @"guid:\s*([a-fA-F0-9]+)";
 
+            //comma version: Name,Type,Level,Damage,Light Damage,Heavy Damage,Vert Recoil,Hor Recoil,First Shot Kick,Velocity,Acc1,Acc2,Acc3,Acc4,Accuracy,Firerate,Sound Spread,Muzzle Flash,Control,Weight,ADS,Running Speed,Reload Speed,Reload,Drop Reload,Empty Reload,Empty Drop Reload,Draw Speed,Bolt Speed,Magazine Size,Key1Time,Key1Value,Key1InSlope,Key1OutSlope,Key1TangentMode,Key1WeightedMode,Key1InWeight,Key1OutWeight,Fall-off START,Key2Value,Key2InSlope,Key2OutSlope,Key2TangentMode,Key2WeightedMode,Key2InWeight,Key2OutWeight,Fall-off END,Min Damage,Key3InSlope,Key3OutSlope,Key3TangentMode,Key3WeightedMode,Key3InWeight,Key3OutWeight
             string Gun_CSV_HEADER = "Name;Type;Level;Damage;Light Damage;Heavy Damage;Vert Recoil;Hor Recoil;First Shot Kick;Velocity;Acc1;Acc2;Acc3;Acc4;Accuracy;Firerate;Sound Spread;Muzzle Flash;Control;Weight;ADS;Running Speed;Reload Speed;Reload;Drop Reload;Empty Reload;Empty Drop Reload;Draw Speed;Bolt Speed;Magazine Size;Key1Time;Key1Value;Key1InSlope;Key1OutSlope;Key1TangentMode;Key1WeightedMode;Key1InWeight;Key1OutWeight;Fall-off START;Key2Value;Key2InSlope;Key2OutSlope;Key2TangentMode;Key2WeightedMode;Key2InWeight;Key2OutWeight;Fall-off END;Min Damage;Key3InSlope;Key3OutSlope;Key3TangentMode;Key3WeightedMode;Key3InWeight;Key3OutWeight";
+            
+            //comma version: Attachment,Type,Damage,Light Damage,Heavy Damage,Vert Recoil,Hor Recoil,First Shot Kick,Velocity,Accuracy,Firerate,Sound Spread,Muzzle Flash,Control,ADS,Running Speed,Reload,Draw Speed,Bolt Speed
             string Attachment_CSV_HEADER = "Attachment;Type;Damage;Light Damage;Heavy Damage;Vert Recoil;Hor Recoil;First Shot Kick;Velocity;Accuracy;Firerate;Sound Spread;Muzzle Flash;Control;ADS;Running Speed;Reload;Draw Speed;Bolt Speed";
+            
+            //comma version: Gun,Magazine,Damage,Light Damage,Heavy Damage,Vert Recoil,Hor Recoil,First Shot Kick,Velocity,Accuracy,Firerate,Sound Spread,Muzzle Flash,Control,ADS,Running Speed,Reload,Draw Speed,Bolt Speed,Magazine Size
             string MagazineCSV_HEADER = "Gun;Magazine;Damage;Light Damage;Heavy Damage;Vert Recoil;Hor Recoil;First Shot Kick;Velocity;Accuracy;Firerate;Sound Spread;Muzzle Flash;Control;ADS;Running Speed;Reload;Draw Speed;Bolt Speed;Magazine Size";
 
             List<string> List_WeaponMonoPaths = new List<string>(); //Done
@@ -181,9 +188,9 @@ namespace DataminingScript
             List<string> List_ReloadFastBolt_Times = new List<string>(); //Done, Use in Weapons() for reload and bolt times
             List<string> List_Bolt_Times = new List<string>(); //Done, Use in Weapons() for reload and bolt times
 
-            List<Gun> Guns = new List<Gun>(); //Will contain all Weapon Values
-            List<Magazine> Magazines = new List<Magazine>(); //Will contain all Magazine Values
-            List<Attachment> Attachments = new List<Attachment>(); //Will Contain all Attachment Values
+            List<Gun> Guns = new List<Gun>(); //Done, Will contain all Weapon Values
+            List<Magazine> Magazines = new List<Magazine>(); //Done, Will contain all Magazine Values
+            List<Attachment> Attachments = new List<Attachment>(); //Done, Will Contain all Attachment Values
 
             //Order of methods should always be
             //1.PathSorting (All paths used in upcoming codes)
@@ -1236,10 +1243,11 @@ namespace DataminingScript
 
             using (var INTO_CSV = new StreamWriter(CSV_Location + "guns.csv"))
             {
-                INTO_CSV.WriteLine("Name;Type;Level;Damage;Light Damage;Heavy Damage;Vert Recoil;Hor Recoil;First Shot Kick;Velocity;Acc1;Acc2;Acc3;Acc4;Accuracy;Firerate;Sound Spread;Muzzle Flash;Control;Weight;ADS;Running Speed;Reload Speed;Reload;Drop Reload;Empty Reload;Empty Drop Reload;Draw Speed;Bolt Speed;Magazine Size;Key1Time;Key1Value;Key1InSlope;Key1OutSlope;Key1TangentMode;Key1WeightedMode;Key1InWeight;Key1OutWeight;Fall-off START;Key2Value;Key2InSlope;Key2OutSlope;Key2TangentMode;Key2WeightedMode;Key2InWeight;Key2OutWeight;Fall-off END;Min Damage;Key3InSlope;Key3OutSlope;Key3TangentMode;Key3WeightedMode;Key3InWeight;Key3OutWeight");
-
+                INTO_CSV.WriteLine(Gun_CSV_HEADER);
                 foreach (var gun in Guns)
                 {
+                    //Comment out the version you don't use with "//"
+                    //comma version: INTO_CSV.WriteLine($"{gun.WeaponName},{gun.WeaponType},{gun.Level},{gun.InfantryDamage},{gun.LightDamage},{gun.HeavyDamage},{gun.VerticalRecoil},{gun.HorizontalRecoil},{gun.FirstShotKick},{gun.Velocity},{gun.Acc1},{gun.Acc2},{gun.Acc3},{gun.Acc4},{gun.Accuracy},{gun.Firerate},{gun.SoundSpread},{gun.MuzzleFlash},{gun.Control},{gun.Weight},{gun.AimDownTime},{gun.RunningSpeed},{gun.ReloadSpeed},{gun.Reload_time},{gun.ReloadFast_time},{gun.ReloadBolt_time},{gun.ReloadFastBolt_time},{gun.DrawSpeed},{gun.BoltSpeed},{gun.DefaultMagazineSize},{gun.Key1Time},{gun.Key1Value},{gun.Key1InSlope},{gun.Key1OutSlope},{gun.Key1TangentMode},{gun.Key1WeightedMode},{gun.Key1InWeight},{gun.Key1OutWeight},{gun.Key2Time},{gun.Key2Value},{gun.Key2InSlope},{gun.Key2OutSlope},{gun.Key2TangentMode},{gun.Key2WeightedMode},{gun.Key2InWeight},{gun.Key2OutWeight},{gun.Key3Time},{gun.Key3Value},{gun.Key3InSlope},{gun.Key3OutSlope},{gun.Key3TangentMode},{gun.Key3WeightedMode},{gun.Key3InWeight},{gun.Key3OutWeight}");
                     INTO_CSV.WriteLine($"{gun.WeaponName};{gun.WeaponType};{gun.Level};{gun.InfantryDamage};{gun.LightDamage};{gun.HeavyDamage};{gun.VerticalRecoil};{gun.HorizontalRecoil};{gun.FirstShotKick};{gun.Velocity};{gun.Acc1};{gun.Acc2};{gun.Acc3};{gun.Acc4};{gun.Accuracy};{gun.Firerate};{gun.SoundSpread};{gun.MuzzleFlash};{gun.Control};{gun.Weight};{gun.AimDownTime};{gun.RunningSpeed};{gun.ReloadSpeed};{gun.Reload_time};{gun.ReloadFast_time};{gun.ReloadBolt_time};{gun.ReloadFastBolt_time};{gun.DrawSpeed};{gun.BoltSpeed};{gun.DefaultMagazineSize};{gun.Key1Time};{gun.Key1Value};{gun.Key1InSlope};{gun.Key1OutSlope};{gun.Key1TangentMode};{gun.Key1WeightedMode};{gun.Key1InWeight};{gun.Key1OutWeight};{gun.Key2Time};{gun.Key2Value};{gun.Key2InSlope};{gun.Key2OutSlope};{gun.Key2TangentMode};{gun.Key2WeightedMode};{gun.Key2InWeight};{gun.Key2OutWeight};{gun.Key3Time};{gun.Key3Value};{gun.Key3InSlope};{gun.Key3OutSlope};{gun.Key3TangentMode};{gun.Key3WeightedMode};{gun.Key3InWeight};{gun.Key3OutWeight}");
                 }
 
@@ -1250,6 +1258,8 @@ namespace DataminingScript
                 INTO_CSV.WriteLine(Attachment_CSV_HEADER);
                 foreach (var attachment in Attachments)
                 {
+                    //Comment out the version you don't use with "//"
+                    //comma version: INTO_CSV.WriteLine($"{attachment.AttachmentName},,{attachment.InfantryDamage},{attachment.LightDamage},{attachment.HeavyDamage},{attachment.VerticalRecoil},{attachment.HorizontalRecoil},{attachment.FirstShotKick},{attachment.Velocity},{attachment.Accuracy},{attachment.Firerate},{attachment.SoundSpread},{attachment.MuzzleFlash},{attachment.Weight},{attachment.AimDownTime},{attachment.RunningSpeed},{attachment.ReloadSpeed},{attachment.DrawSpeed},{attachment.BoltSpeed}");
                     INTO_CSV.WriteLine($"{attachment.AttachmentName};;{attachment.InfantryDamage};{attachment.LightDamage};{attachment.HeavyDamage};{attachment.VerticalRecoil};{attachment.HorizontalRecoil};{attachment.FirstShotKick};{attachment.Velocity};{attachment.Accuracy};{attachment.Firerate};{attachment.SoundSpread};{attachment.MuzzleFlash};{attachment.Weight};{attachment.AimDownTime};{attachment.RunningSpeed};{attachment.ReloadSpeed};{attachment.DrawSpeed};{attachment.BoltSpeed}");
                 }
             }
@@ -1260,6 +1270,8 @@ namespace DataminingScript
 
                 foreach (var attachment in Attachments)
                 {
+                    //Comment out the version you don't use with "//"
+                    //comma version: INTO_CSV.WriteLine($"{attachment.AttachmentName},,{attachment.ADD_InfantryDamage},{attachment.ADD_LightDamage},{attachment.ADD_HeavyDamage},{attachment.ADD_VerticalRecoil},{attachment.ADD_HorizontalRecoil},{attachment.ADD_FirstShotKick},{attachment.ADD_Velocity},{attachment.ADD_Accuracy},{attachment.ADD_Firerate},{attachment.ADD_SoundSpread},{attachment.ADD_MuzzleFlash},{attachment.ADD_Weight},{attachment.ADD_AimDownTime},{attachment.ADD_RunningSpeed},{attachment.ADD_ReloadSpeed},{attachment.ADD_DrawSpeed},{attachment.ADD_BoltSpeed}");
                     INTO_CSV.WriteLine($"{attachment.AttachmentName};;{attachment.ADD_InfantryDamage};{attachment.ADD_LightDamage};{attachment.ADD_HeavyDamage};{attachment.ADD_VerticalRecoil};{attachment.ADD_HorizontalRecoil};{attachment.ADD_FirstShotKick};{attachment.ADD_Velocity};{attachment.ADD_Accuracy};{attachment.ADD_Firerate};{attachment.ADD_SoundSpread};{attachment.ADD_MuzzleFlash};{attachment.ADD_Weight};{attachment.ADD_AimDownTime};{attachment.ADD_RunningSpeed};{attachment.ADD_ReloadSpeed};{attachment.ADD_DrawSpeed};{attachment.ADD_BoltSpeed}");
                 }
             }
@@ -1269,6 +1281,8 @@ namespace DataminingScript
                 INTO_CSV.WriteLine(MagazineCSV_HEADER);
                 foreach (var magazine in Magazines)
                 {
+                    //Comment out the version you don't use with "//"
+                    //comma version: INTO_CSV.WriteLine($"{magazine.WeaponName},{magazine.Name},{magazine.InfantryDamage},{magazine.LightDamage},{magazine.HeavyDamage},{magazine.VerticalRecoil},{magazine.HorizontalRecoil},{magazine.FirstShotKick},{magazine.Velocity},{magazine.Accuracy},{magazine.Firerate},{magazine.SoundSpread},{magazine.MuzzleFlash},{magazine.Weight},{magazine.AimDownTime},{magazine.RunningSpeed},{magazine.ReloadSpeed},{magazine.DrawSpeed},{magazine.BoltSpeed},{magazine.Ammo}");
                     INTO_CSV.WriteLine($"{magazine.WeaponName};{magazine.Name};{magazine.InfantryDamage};{magazine.LightDamage};{magazine.HeavyDamage};{magazine.VerticalRecoil};{magazine.HorizontalRecoil};{magazine.FirstShotKick};{magazine.Velocity};{magazine.Accuracy};{magazine.Firerate};{magazine.SoundSpread};{magazine.MuzzleFlash};{magazine.Weight};{magazine.AimDownTime};{magazine.RunningSpeed};{magazine.ReloadSpeed};{magazine.DrawSpeed};{magazine.BoltSpeed};{magazine.Ammo}");
                 }
             }
@@ -1278,6 +1292,8 @@ namespace DataminingScript
                 INTO_CSV.WriteLine(MagazineCSV_HEADER);
                 foreach (var magazine in Magazines)
                 {
+                    //Comment out the version you don't use with "//"
+                    //comma version: INTO_CSV.WriteLine($"{magazine.WeaponName},{magazine.Name},{magazine.ADD_InfantryDamage},{magazine.ADD_LightDamage},{magazine.ADD_HeavyDamage},{magazine.ADD_VerticalRecoil},{magazine.ADD_HorizontalRecoil},{magazine.ADD_FirstShotKick},{magazine.ADD_Velocity},{magazine.ADD_Accuracy},{magazine.ADD_Firerate},{magazine.ADD_SoundSpread},{magazine.ADD_MuzzleFlash},{magazine.ADD_Weight},{magazine.ADD_AimDownTime},{magazine.ADD_RunningSpeed},{magazine.ADD_ReloadSpeed},{magazine.ADD_DrawSpeed},{magazine.ADD_BoltSpeed}");
                     INTO_CSV.WriteLine($"{magazine.WeaponName};{magazine.Name};{magazine.ADD_InfantryDamage};{magazine.ADD_LightDamage};{magazine.ADD_HeavyDamage};{magazine.ADD_VerticalRecoil};{magazine.ADD_HorizontalRecoil};{magazine.ADD_FirstShotKick};{magazine.ADD_Velocity};{magazine.ADD_Accuracy};{magazine.ADD_Firerate};{magazine.ADD_SoundSpread};{magazine.ADD_MuzzleFlash};{magazine.ADD_Weight};{magazine.ADD_AimDownTime};{magazine.ADD_RunningSpeed};{magazine.ADD_ReloadSpeed};{magazine.ADD_DrawSpeed};{magazine.ADD_BoltSpeed}");
                 }
             }
