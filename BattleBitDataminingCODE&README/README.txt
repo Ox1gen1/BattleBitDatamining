@@ -19,4 +19,4 @@ AnimationClip_Location  ...\BattleBit\ExportedProject\Assets\AnimationClip\
 CSV_Location ...\"Where you want your .csv files written in"
 
 Execute Script and CSV_Location should have 5 .csv files, which are filled with values.
-NOTE: IF the created .csv files look like AK74;X;X;X;X;X, you need to use HEADERS which use , as separators instead of ; and also uncomment comma versions in WriteCSV().
+NOTE: IF the created .csv files look like AK74;X;X;X;X;X, you need replace HEADER strings with the version which uses , as a separator instead.
