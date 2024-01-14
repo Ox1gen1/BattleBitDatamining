@@ -1,13 +1,22 @@
+Script/Code is used for creating Weapon, Attachment and Magazine CSV files
+
 "BattleBitRemasteredDataMiningScript PUBLIC" is a script created by Ox1gen1.
 
 In order to use the script you need to use Unity AssetRipper
 
-Tutorial video: https://www.youtube.com/watch?v=jiWSxHzj434
-GitHub to AssetRipper: https://github.com/AssetRipper/AssetRipper
+To use the Script/Code
+You need:
+C# IDE (Recommended: Microsoft Visual Studio)
+AssetRipper (https://github.com/AssetRipper/AssetRipper), also tutorial for using it (https://www.youtube.com/watch?v=jiWSxHzj434)
 
-When using AssetRipper make sure to export all so you have all
-When you have exported all the size of "BattleBit" file (Asset Rippers output) should be over 7GB (Mine was 7.7GB)
+What you need to do:
+Use Asset Ripper and get ALL BattleBit Remastered files
+Copy/Paste code into a code project/IDE so you can run the code
+Insert your own file paths.
+Monobehaviour_Location  ...\BattleBit\ExportedProject\Assets\MonoBehaviour\
+PrefabInstance_Location  ...\BattleBit\ExportedProject\Assets\PrefabInstance\
+AnimationClip_Location  ...\BattleBit\ExportedProject\Assets\AnimationClip\
+CSV_Location ...\"Where you want your .csv files written in"
 
-Use Microsoft Visual Studio or whatever you want, copy the code from BattleBitRemasteredDataMiningScript PUBLIC.txt
-Copy/Paste the code, write your MonoBehaviour, PrefabInstance and AnimationClip paths.
-Execute code and it should work.
+Execute Script and CSV_Location should have 5 .csv files, which are filled with values.
+NOTE: IF the created .csv files look like AK74;X;X;X;X;X, you need to use HEADERS which use , as separators instead of ; and also uncomment comma versions in WriteCSV().
