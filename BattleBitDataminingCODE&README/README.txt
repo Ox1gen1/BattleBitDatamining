@@ -6,6 +6,7 @@ In order to use the script you need to use Unity AssetRipper
 
 To use the Script/Code
 You need:
+BattleBit Remastered
 C# IDE (Recommended: Microsoft Visual Studio)
 AssetRipper (https://github.com/AssetRipper/AssetRipper), also tutorial for using it (https://www.youtube.com/watch?v=jiWSxHzj434)
 
