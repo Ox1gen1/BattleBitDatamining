@@ -10,7 +10,8 @@ C# IDE (Recommended: Microsoft Visual Studio)
 AssetRipper (https://github.com/AssetRipper/AssetRipper), also tutorial for using it (https://www.youtube.com/watch?v=jiWSxHzj434)
 
 What you need to do:
-Use Asset Ripper and get ALL BattleBit Remastered files
+Use Asset Ripper and get ALL BattleBit Remastered files (See BattleBit Asset Ripper GUIDE.pdf)
+
 Copy/Paste code into a code project/IDE so you can run the code
 Insert your own file paths.
 Monobehaviour_Location  ...\BattleBit\ExportedProject\Assets\MonoBehaviour\
