@@ -1,0 +1,1286 @@
+
+using System.Text.RegularExpressions;
+
+namespace DataminingScript
+{
+    class Gun
+    {
+        public string WeaponName { get; set; }
+        public string WeaponType { get; set; }
+        public float Level { get; set; }
+        public float InfantryDamage { get; set; }
+        public float LightDamage { get; set; }
+        public float HeavyDamage { get; set; }
+        public float VerticalRecoil { get; set; }
+        public float HorizontalRecoil { get; set; }
+        public float FirstShotKick { get; set; }
+        public float Velocity { get; set; }
+        public float Acc1 { get; set; }
+        public float Acc2 { get; set; }
+        public float Acc3 { get; set; }
+        public float Acc4 { get; set; }
+        public float Accuracy { get; set; }
+        public float Firerate { get; set; }
+        public float SoundSpread { get; set; }
+        public float MuzzleFlash { get; set; }
+        public float Weight { get; set; }
+        public float Control { get; set; }
+        public float AimDownTime { get; set; }
+        public float RunningSpeed { get; set; }
+        public float ReloadSpeed { get; set; }
+        public float Reload_time { get; set; }
+        public float ReloadBolt_time { get; set; }
+        public float ReloadFast_time { get; set; }
+        public float ReloadFastBolt_time { get; set; }
+
+        public float DrawSpeed { get; set; }
+        public float BoltSpeed { get; set; }
+        public float DefaultMagazineSize { get; set; }
+
+        public float Key1Time { get; set; }
+        public float Key1Value { get; set; }
+        public float Key1InSlope { get; set; }
+        public float Key1OutSlope { get; set; }
+        public float Key1TangentMode { get; set; }
+        public float Key1WeightedMode { get; set; }
+        public float Key1InWeight { get; set; }
+        public float Key1OutWeight { get; set; }
+
+        public float Key2Time { get; set; }
+        public float Key2Value { get; set; }
+        public float Key2InSlope { get; set; }
+        public float Key2OutSlope { get; set; }
+        public float Key2TangentMode { get; set; }
+        public float Key2WeightedMode { get; set; }
+        public float Key2InWeight { get; set; }
+        public float Key2OutWeight { get; set; }
+
+        public float Key3Time { get; set; }
+        public float Key3Value { get; set; }
+        public float Key3InSlope { get; set; }
+        public float Key3OutSlope { get; set; }
+        public float Key3TangentMode { get; set; }
+        public float Key3WeightedMode { get; set; }
+        public float Key3InWeight { get; set; }
+        public float Key3OutWeight { get; set; }
+    }
+    class Attachment
+    {
+        public string AttachmentName { get; set; }
+        public float InfantryDamage { get; set; }
+        public float LightDamage { get; set; }
+        public float HeavyDamage { get; set; }
+        public float VerticalRecoil { get; set; }
+        public float HorizontalRecoil { get; set; }
+        public float FirstShotKick { get; set; }
+        public float Velocity { get; set; }
+        public float Accuracy { get; set; }
+        public float Firerate { get; set; }
+        public float SoundSpread { get; set; }
+        public float MuzzleFlash { get; set; }
+        public float Weight { get; set; }
+        public float AimDownTime { get; set; }
+        public float RunningSpeed { get; set; }
+        public float ReloadSpeed { get; set; }
+        public float DrawSpeed { get; set; }
+        public float BoltSpeed { get; set; }
+        public float ADD_InfantryDamage { get; set; }
+        public float ADD_LightDamage { get; set; }
+        public float ADD_HeavyDamage { get; set; }
+        public float ADD_VerticalRecoil { get; set; }
+        public float ADD_HorizontalRecoil { get; set; }
+        public float ADD_FirstShotKick { get; set; }
+        public float ADD_Velocity { get; set; }
+        public float ADD_Accuracy { get; set; }
+        public float ADD_Firerate { get; set; }
+        public float ADD_SoundSpread { get; set; }
+        public float ADD_MuzzleFlash { get; set; }
+        public float ADD_Weight { get; set; }
+        public float ADD_AimDownTime { get; set; }
+        public float ADD_RunningSpeed { get; set; }
+        public float ADD_ReloadSpeed { get; set; }
+        public float ADD_DrawSpeed { get; set; }
+        public float ADD_BoltSpeed { get; set; }
+    }
+    class Magazine
+    {
+        public string WeaponName { get; set; }
+        public string Name { get; set; }
+        public float InfantryDamage { get; set; }
+        public float LightDamage { get; set; }
+        public float HeavyDamage { get; set; }
+        public float VerticalRecoil { get; set; }
+        public float HorizontalRecoil { get; set; }
+        public float FirstShotKick { get; set; }
+        public float Velocity { get; set; }
+        public float Accuracy { get; set; }
+        public float Firerate { get; set; }
+        public float SoundSpread { get; set; }
+        public float MuzzleFlash { get; set; }
+        public float Weight { get; set; }
+        public float AimDownTime { get; set; }
+        public float RunningSpeed { get; set; }
+        public float ReloadSpeed { get; set; }
+        public float DrawSpeed { get; set; }
+        public float Ammo { get; set; }
+        public float BoltSpeed { get; set; }
+        public float ADD_InfantryDamage { get; set; }
+        public float ADD_LightDamage { get; set; }
+        public float ADD_HeavyDamage { get; set; }
+        public float ADD_VerticalRecoil { get; set; }
+        public float ADD_HorizontalRecoil { get; set; }
+        public float ADD_FirstShotKick { get; set; }
+        public float ADD_Velocity { get; set; }
+        public float ADD_Accuracy { get; set; }
+        public float ADD_Firerate { get; set; }
+        public float ADD_SoundSpread { get; set; }
+        public float ADD_MuzzleFlash { get; set; }
+        public float ADD_Weight { get; set; }
+        public float ADD_AimDownTime { get; set; }
+        public float ADD_RunningSpeed { get; set; }
+        public float ADD_ReloadSpeed { get; set; }
+        public float ADD_DrawSpeed { get; set; }
+        public float ADD_BoltSpeed { get; set; }
+
+    }
+
+    class BattleBitRemasteredDataMiningCode
+    {
+        static void Main(string[] args)
+        {
+            var ExecutionTime = System.Diagnostics.Stopwatch.StartNew();  //Starts the timer for how long program took
+
+            string Monobehaviour_Location = @"C:\Users\AUTHOR\Desktop\BBR Ripperino\BattleBit\ExportedProject\Assets\MonoBehaviour\"; //...\BattleBit\ExportedProject\Assets\MonoBehaviour\"
+            string PrefabInstance_Location = @"C:\Users\AUTHOR\Desktop\BBR Ripperino\BattleBit\ExportedProject\Assets\PrefabInstance\"; // ...\BattleBit\ExportedProject\Assets\PrefabInstance\"
+            string AnimationClip_Location = @"C:\Users\AUTHOR\Desktop\BBR Ripperino\BattleBit\ExportedProject\Assets\AnimationClip\"; // ...\BattleBit\ExportedProject\Assets\AnimationClip\"
+            string CSV_Location = @"C:\Users\AUTHOR\Desktop\BBR Ripperino\CSV_CREATIONS\"; // ...\"Where you want your CSV files written in"
+
+	    string Number_Regex = @"[+-]?([0-9]*[.])?[0-9]+";
+            string Name_Regex = @"(?<=m_Name:\s).+";
+            string MagazineName_Regex = @"(?<=MagName:\s).+";
+            string GUID_Regex = @"guid:\s*([a-fA-F0-9]+)";
+
+            string Gun_CSV_HEADER = "Name;Type;Level;Damage;Light Damage;Heavy Damage;Vert Recoil;Hor Recoil;First Shot Kick;Velocity;Acc1;Acc2;Acc3;Acc4;Accuracy;Firerate;Sound Spread;Muzzle Flash;Control;Weight;ADS;Running Speed;Reload Speed;Reload;Drop Reload;Empty Reload;Empty Drop Reload;Draw Speed;Bolt Speed;Magazine Size;Key1Time;Key1Value;Key1InSlope;Key1OutSlope;Key1TangentMode;Key1WeightedMode;Key1InWeight;Key1OutWeight;Fall-off START;Key2Value;Key2InSlope;Key2OutSlope;Key2TangentMode;Key2WeightedMode;Key2InWeight;Key2OutWeight;Fall-off END;Min Damage;Key3InSlope;Key3OutSlope;Key3TangentMode;Key3WeightedMode;Key3InWeight;Key3OutWeight";
+            string Attachment_CSV_HEADER = "Attachment;Type;Damage;Light Damage;Heavy Damage;Vert Recoil;Hor Recoil;First Shot Kick;Velocity;Accuracy;Firerate;Sound Spread;Muzzle Flash;Control;ADS;Running Speed;Reload;Draw Speed;Bolt Speed";
+            string MagazineCSV_HEADER = "Gun;Magazine;Damage;Light Damage;Heavy Damage;Vert Recoil;Hor Recoil;First Shot Kick;Velocity;Accuracy;Firerate;Sound Spread;Muzzle Flash;Control;ADS;Running Speed;Reload;Draw Speed;Bolt Speed;Magazine Size";
+
+            List<string> List_WeaponMonoPaths = new List<string>(); //Done
+            List<string> List_AttachmentMonoPaths = new List<string>(); //Done
+            List<string> List_WeaponPrefabPaths = new List<string>(); //Done
+            List<string> List_AttachmentPrefabPaths = new List<string>(); //Done
+
+            List<string> List_ReloadMetaAnimationPaths = new List<string>(); //Done
+            List<string> List_ReloadBoltMetaAnimationPaths = new List<string>(); //Done
+            List<string> List_ReloadFastMetaAnimationPaths = new List<string>(); //Done
+            List<string> List_ReloadFastBoltMetaAnimationPaths = new List<string>(); //Done
+            List<string> List_BoltMetaAnimationPaths = new List<string>(); //Done
+
+            List<string> List_Reload_Times = new List<string>(); //Done, Use in Weapons() for reload and bolt times
+            List<string> List_ReloadBolt_Times = new List<string>(); //Done, Use in Weapons() for reload and bolt times
+            List<string> List_ReloadFast_Times = new List<string>(); //Done, Use in Weapons() for reload and bolt times
+            List<string> List_ReloadFastBolt_Times = new List<string>(); //Done, Use in Weapons() for reload and bolt times
+            List<string> List_Bolt_Times = new List<string>(); //Done, Use in Weapons() for reload and bolt times
+
+            List<Gun> Guns = new List<Gun>(); //Will contain all Weapon Values
+            List<Magazine> Magazines = new List<Magazine>(); //Will contain all Magazine Values
+            List<Attachment> Attachments = new List<Attachment>(); //Will Contain all Attachment Values
+
+            //Order of methods should always be
+            //1.PathSorting (All paths used in upcoming codes)
+            //2.Animation (Weapon reload and bolt times)
+            //3.The Rest
+
+
+            SortMonoPathsAndPrefabAndAnimationPaths(
+                Monobehaviour_Location,
+                PrefabInstance_Location,
+                AnimationClip_Location,
+                //All Paths below
+                List_WeaponMonoPaths,
+                List_AttachmentMonoPaths,
+                List_WeaponPrefabPaths,
+                List_AttachmentPrefabPaths,
+                //Below go to "Animations" method
+                List_ReloadMetaAnimationPaths,
+                List_ReloadBoltMetaAnimationPaths,
+                List_ReloadFastMetaAnimationPaths,
+                List_ReloadFastBoltMetaAnimationPaths,
+                List_BoltMetaAnimationPaths);
+
+            Animations(
+                Number_Regex,
+                GUID_Regex,
+                AnimationClip_Location,
+                PrefabInstance_Location,
+                List_WeaponPrefabPaths,
+                //Animation Paths Below 
+                List_ReloadMetaAnimationPaths,
+                List_ReloadBoltMetaAnimationPaths,
+                List_ReloadFastMetaAnimationPaths,
+                List_ReloadFastBoltMetaAnimationPaths,
+                List_BoltMetaAnimationPaths,
+                //Below go to "WeaponAndMagazineValues" method
+                List_Reload_Times,
+                List_ReloadBolt_Times,
+                List_ReloadFast_Times,
+                List_ReloadFastBolt_Times,
+                List_Bolt_Times
+                );
+            WeaponAndMagazineValues(
+                List_WeaponMonoPaths,
+                Name_Regex,
+                Number_Regex,
+                MagazineName_Regex,
+                //Lists below sent and used in WriteCSV() method
+                Guns,
+                Magazines,
+                //Lists below used in setting weapon reload and bolt times
+                List_Reload_Times,
+                List_ReloadBolt_Times,
+                List_ReloadFast_Times,
+                List_ReloadFastBolt_Times,
+                List_Bolt_Times);
+
+            AttachmentValues(
+                List_AttachmentMonoPaths,
+                Name_Regex,
+                Number_Regex,
+                //List below sent and used in WriteCSV() method
+                Attachments
+                );
+
+            WriteCSV(
+                CSV_Location,
+                Gun_CSV_HEADER,
+                Attachment_CSV_HEADER,
+                MagazineCSV_HEADER,
+                Guns,
+                Attachments,
+                Magazines
+                );
+
+            ExecutionTime.Stop();
+            Console.WriteLine("Datamining program took " + ExecutionTime.ElapsedMilliseconds / 1000f + " seconds to fully complete");
+        }
+
+        //Prepares Mono, Prefab and Animation paths for other methods to use
+        static void SortMonoPathsAndPrefabAndAnimationPaths(string Monobehaviour_Location, string PrefabInstance_Location, string AnimationClip_Location, List<string> List_WeaponMonoPaths, List<string> List_AttachmentMonoPaths, List<string> List_WeaponPrefabPaths, List<string> List_AttachmentPrefabPaths, List<string> List_ReloadMetaAnimationPaths, List<string> List_ReloadBoltMetaAnimationPaths, List<string> List_ReloadFastMetaAnimationPaths, List<string> List_ReloadFastBoltMetaAnimationPaths, List<string> List_BoltMetaAnimationPaths)
+        {
+
+            string[] MonobehaviourPaths = Directory.GetFiles(Monobehaviour_Location);
+            string[] PrefabInstancePaths = Directory.GetFiles(PrefabInstance_Location);
+            string[] AnimationClipPaths = Directory.GetFiles(AnimationClip_Location);
+
+            //Goes through FILE: MonoBehaviour and finds Weapon and Attachment MonoBehaviour paths
+            foreach (string Monobehaviour_Path in MonobehaviourPaths)
+            {
+                bool skipper = false;
+                int SkipCount = 0;
+
+                foreach (string line in File.ReadLines(Monobehaviour_Path))
+                {
+                    if (line.Contains("WeaponType:"))
+                    {   //Excludes "0_EmptyGun.asset" 
+                        if (Monobehaviour_Path != Monobehaviour_Location + "0_EmptyGun.asset")
+                        {
+                            List_WeaponMonoPaths.Add(Monobehaviour_Path);
+                        }
+                    }
+
+                    if (line.Contains("m_EditorClassIdentifier:"))
+                    {
+                        skipper = true;
+
+                    }
+                    if (skipper)
+                    {
+                        SkipCount++;
+                    }
+
+                    if (skipper == true && SkipCount == 2)
+                    {
+                        if (line.Contains(" ID:"))
+                        {
+                            List_AttachmentMonoPaths.Add(Monobehaviour_Path);
+                        }
+                    }
+
+                }
+
+            }
+
+
+            //Goes through FILE: PrefabInstance and finds Weapon and Attachment prefab paths
+            foreach (string Prefab_Path in PrefabInstancePaths)
+            {
+                int i = 0;
+                int j = 0;
+
+
+                if (!Prefab_Path.Contains( "FirstPersonController.prefab") && !Prefab_Path.Contains("EmptyGun.prefab") && !Prefab_Path.Contains("ThirdPersonController.prefab"))
+                {
+                    foreach (string line in File.ReadLines(Prefab_Path))
+                    {
+                        if (line.Contains("fileID: 7400000, guid:"))
+                        {
+                            i++;
+                        }
+
+                        if (i >= 12)
+                        {
+                            List_WeaponPrefabPaths.Add(Prefab_Path);
+                            i = 0;
+                        }
+                    }
+
+
+                    foreach (string line in File.ReadLines(Prefab_Path))
+                    {
+                        j++;
+
+                        if (j == 15)
+                        {
+                            if (line.Contains("m_Layer: 8"))
+                            {
+                                List_AttachmentPrefabPaths.Add(Prefab_Path);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            //Goes through FILE: AnimationClips and finds Reload and Bolt animation paths.
+            foreach (string AnimationPath in AnimationClipPaths)
+            {
+                if (AnimationPath.Contains("Reload_") || AnimationPath.Contains("Reload.anim.meta"))
+                {
+                    if (AnimationPath.Contains(".meta"))
+                    {
+                        List_ReloadMetaAnimationPaths.Add(AnimationPath);
+                    }
+
+                }
+                if (AnimationPath.Contains("ReloadBolt_") || AnimationPath.Contains("ReloadBolt.anim.meta"))
+                {
+                    if (AnimationPath.Contains(".meta"))
+                    {
+                        List_ReloadBoltMetaAnimationPaths.Add(AnimationPath);
+                    }
+                }
+                if (AnimationPath.Contains("ReloadFast_") || AnimationPath.Contains("ReloadFast.anim.meta"))
+                {
+                    if (AnimationPath.Contains(".meta"))
+                    {
+                        List_ReloadFastMetaAnimationPaths.Add(AnimationPath);
+                    }
+                }
+                if (AnimationPath.Contains("ReloadFastBolt_") || AnimationPath.Contains("ReloadFastBolt.anim.meta"))
+                {
+                    if (AnimationPath.Contains(".meta"))
+                    {
+                        List_ReloadFastBoltMetaAnimationPaths.Add(AnimationPath);
+                    }
+                }
+                if (AnimationPath.Contains("FullAction_") || AnimationPath.Contains("FullAction.anim.meta"))
+                {
+                    if (AnimationPath.Contains(".meta"))
+                    {
+                        List_BoltMetaAnimationPaths.Add(AnimationPath);
+                    }
+
+                }
+            }
+
+            //Print Weapon MonoPaths to console
+            foreach (string MonoPath in List_WeaponMonoPaths)
+            {
+                //Console.WriteLine(MonoPath);
+            }
+            //Print Attachment MonoPaths to console
+            foreach (string MonoPath in List_AttachmentMonoPaths)
+            {
+                //Console.WriteLine(MonoPath);
+            }
+
+            //Print Weapon PrefabPaths to console
+            foreach (string PrefabPath in List_WeaponPrefabPaths)
+            {
+                //Console.WriteLine(PrefabPath);
+            }
+            //Print Attachment PrefabPaths to console
+            foreach (string PrefabPath in List_AttachmentPrefabPaths)
+            {
+                //Console.WriteLine(PrefabPath);
+            }
+        }
+
+        //Handles all Animation related values, which can then be used in Weapons()
+        static void Animations(string Number_Regex, string GUID_Regex, string AnimationClip_Location, string PrefabInstance_Location, List<string> List_WeaponPrefabPaths, List<string> List_ReloadMetaAnimationPaths, List<string> List_ReloadBoltMetaAnimationPaths, List<string> List_ReloadFastMetaAnimationPaths, List<string> List_ReloadFastBoltMetaAnimationPaths, List<string> List_BoltMetaAnimationPaths, List<string> List_Reload_Times, List<string> List_ReloadBolt_Times, List<string> List_ReloadFast_Times, List<string> List_ReloadFastBolt_Times, List<string> List_Bolt_Times)
+        {
+            //_Path Is in line with _GUID making them "Paralel" _Path[i] = _GUID[i]
+            List<string> List_ReloadNames = new List<string>();
+            List<string> List_BoltNames = new List<string>();
+
+            List<string> List_ReloadMeta_PATH = new List<string>();
+            List<string> List_ReloadMeta_GUID = new List<string>();
+            List<float> List_Reload_Highest = new List<float>();
+
+            List<string> List_ReloadFastMeta_PATH = new List<string>();
+            List<string> List_ReloadFastMeta_GUID = new List<string>();
+            List<float> List_ReloadFast_Highest = new List<float>();
+
+            List<string> List_ReloadBoltMeta_PATH = new List<string>();
+            List<string> List_ReloadBoltMeta_GUID = new List<string>();
+            List<float> List_ReloadBolt_Highest = new List<float>();
+
+            List<string> List_ReloadFastBoltMeta_PATH = new List<string>();
+            List<string> List_ReloadFastBoltMeta_GUID = new List<string>();
+            List<float> List_ReloadFastBolt_Highest = new List<float>();
+
+            List<string> List_BoltMeta_PATH = new List<string>();
+            List<string> List_BoltMeta_GUID = new List<string>();
+            List<float> List_Bolt_Highest = new List<float>();
+
+            //Reload Meta PATH and GUID
+            foreach (string Path in List_ReloadMetaAnimationPaths)
+            {
+                foreach (string line in File.ReadLines(Path))
+                {
+                    if (line.StartsWith("guid: "))
+                    {
+                        List_ReloadMeta_PATH.Add(Path.Replace(".meta", ""));
+                        List_ReloadMeta_GUID.Add(line.Substring(6));
+                    }
+                }
+            }
+            foreach (string Path in List_ReloadFastMetaAnimationPaths)
+            {
+                foreach (string line in File.ReadLines(Path))
+                {
+                    if (line.StartsWith("guid: "))
+                    {
+                        List_ReloadFastMeta_PATH.Add(Path.Replace(".meta", ""));
+                        List_ReloadFastMeta_GUID.Add(line.Substring(6));
+                    }
+                }
+            }
+            foreach (string Path in List_ReloadBoltMetaAnimationPaths)
+            {
+                foreach (string line in File.ReadLines(Path))
+                {
+                    if (line.StartsWith("guid: "))
+                    {
+                        List_ReloadBoltMeta_PATH.Add(Path.Replace(".meta", ""));
+                        List_ReloadBoltMeta_GUID.Add(line.Substring(6));
+                    }
+                }
+            }
+            foreach (string Path in List_ReloadFastBoltMetaAnimationPaths)
+            {
+                foreach (string line in File.ReadLines(Path))
+                {
+                    if (line.StartsWith("guid: "))
+                    {
+                        List_ReloadFastBoltMeta_PATH.Add(Path.Replace(".meta", ""));
+                        List_ReloadFastBoltMeta_GUID.Add(line.Substring(6));
+                    }
+                }
+            }
+            //Bolt Meta PATH and GUID
+            foreach (string Path in List_BoltMetaAnimationPaths)
+            {
+                foreach (string line in File.ReadLines(Path))
+                {
+                    if (line.StartsWith("guid: "))
+                    {
+                        List_BoltMeta_PATH.Add(Path.Replace(".meta", ""));
+                        List_BoltMeta_GUID.Add(line.Substring(6));
+                    }
+                }
+            }
+
+            //ReloadAnimationTimes
+            foreach (string Path in List_WeaponPrefabPaths)
+            {
+                foreach (string line1 in File.ReadLines(Path))
+                {
+                    float highest = 0;
+                    float register;
+                    foreach (string GUID in List_ReloadMeta_GUID)
+                    {
+                        if (line1.Contains(GUID))
+                        {
+                            foreach (string line2 in File.ReadAllLines(List_ReloadMeta_PATH[List_ReloadMeta_GUID.IndexOf(GUID)]))
+                            {
+                                if (line2.Contains("time") && !line2.Contains("E"))
+                                {
+                                    register = float.Parse(Regex.Match(line2, Number_Regex).Value);
+                                    if (register > highest)
+                                    {
+                                        highest = register;
+
+                                    }
+                                }
+                            }
+                        }
+                        if (highest != 0)
+                        {
+                            List_ReloadNames.Add(Path.ToUpper().Substring(85).Replace(".PREFAB", "").Replace("OS14_", "").Replace("VITYAZ", "").Replace("-", "").Replace("REMINGTON700", "REM700").Replace("ULTIMAX", "ULTIMAX100").Replace("MK14", "MKEBR") + ":");
+                            List_Reload_Highest.Add(highest);
+                            break;
+                        }
+                    }
+                }
+            }
+            foreach (string Path in List_WeaponPrefabPaths)
+            {
+                foreach (string line1 in File.ReadLines(Path))
+                {
+                    float highest = 0;
+                    float register;
+                    foreach (string GUID in List_ReloadFastMeta_GUID)
+                    {
+                        if (line1.Contains(GUID))
+                        {
+                            foreach (string line2 in File.ReadAllLines(List_ReloadFastMeta_PATH[List_ReloadFastMeta_GUID.IndexOf(GUID)]))
+                            {
+                                if (line2.Contains("time") && !line2.Contains("E"))
+                                {
+                                    register = float.Parse(Regex.Match(line2, Number_Regex).Value);
+                                    if (register > highest)
+                                    {
+                                        highest = register;
+
+                                    }
+                                }
+                            }
+                        }
+                        if (highest != 0)
+                        {
+                            List_ReloadFast_Highest.Add(highest);
+                            break;
+                        }
+                    }
+                }
+            }
+            foreach (string Path in List_WeaponPrefabPaths)
+            {
+                foreach (string line1 in File.ReadLines(Path))
+                {
+                    float highest = 0;
+                    float register;
+                    foreach (string GUID in List_ReloadBoltMeta_GUID)
+                    {
+                        if (line1.Contains(GUID))
+                        {
+                            foreach (string line2 in File.ReadAllLines(List_ReloadBoltMeta_PATH[List_ReloadBoltMeta_GUID.IndexOf(GUID)]))
+                            {
+                                if (line2.Contains("time") && !line2.Contains("E"))
+                                {
+                                    register = float.Parse(Regex.Match(line2, Number_Regex).Value);
+                                    if (register > highest)
+                                    {
+                                        highest = register;
+
+                                    }
+                                }
+                            }
+                        }
+                        if (highest != 0)
+                        {
+                            List_ReloadBolt_Highest.Add(highest);
+                            break;
+                        }
+                    }
+                }
+            }
+            foreach (string Path in List_WeaponPrefabPaths)
+            {
+                foreach (string line1 in File.ReadLines(Path))
+                {
+                    float highest = 0;
+                    float register;
+                    foreach (string GUID in List_ReloadFastBoltMeta_GUID)
+                    {
+                        if (line1.Contains(GUID))
+                        {
+                            foreach (string line2 in File.ReadAllLines(List_ReloadFastBoltMeta_PATH[List_ReloadFastBoltMeta_GUID.IndexOf(GUID)]))
+                            {
+                                if (line2.Contains("time") && !line2.Contains("E"))
+                                {
+                                    register = float.Parse(Regex.Match(line2, Number_Regex).Value);
+                                    if (register > highest)
+                                    {
+                                        highest = register;
+
+                                    }
+                                }
+                            }
+                        }
+                        if (highest != 0)
+                        {
+                            List_ReloadFastBolt_Highest.Add(highest);
+                            break;
+                        }
+                    }
+                }
+            }
+            //BoltAnimationTimes
+            foreach (string Path in List_WeaponPrefabPaths)
+            {
+                foreach (string line1 in File.ReadLines(Path))
+                {
+                    float highest = 0;
+                    float register;
+                    foreach (string GUID in List_BoltMeta_GUID)
+                    {
+                        if (line1.Contains(GUID))
+                        {
+                            foreach (string line2 in File.ReadAllLines(List_BoltMeta_PATH[List_BoltMeta_GUID.IndexOf(GUID)]))
+                            {
+                                if (line2.Contains("time") && !line2.Contains("E"))
+                                {
+                                    register = float.Parse(Regex.Match(line2, Number_Regex).Value);
+                                    if (register > highest)
+                                    {
+                                        highest = register;
+
+                                    }
+                                }
+                            }
+                        }
+                        if (highest != 0)
+                        {
+                            List_BoltNames.Add(Path.ToUpper().Substring(85).Replace(".PREFAB", "").Replace("OS14_", "").Replace("VITYAZ", "").Replace("-", "").Replace("REMINGTON700", "REM700").Replace("ULTIMAX", "ULTIMAX100").Replace("MK14", "MKEBR") + ":");
+                            List_Bolt_Highest.Add(highest);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            //ReloadAnimation Name+Time
+            for (int i = 0; i < List_Reload_Highest.Count; i++)
+            {
+                List_Reload_Times.Add(List_ReloadNames[i] + List_Reload_Highest[i]);
+                List_ReloadFast_Times.Add(List_ReloadNames[i] + List_ReloadFast_Highest[i]);
+                List_ReloadBolt_Times.Add(List_ReloadNames[i] + List_ReloadBolt_Highest[i]);
+                List_ReloadFastBolt_Times.Add(List_ReloadNames[i] + List_ReloadFastBolt_Highest[i]);
+                //Console.WriteLine(List_ReloadNames[i] + List_Reload_Highest[i]);
+                //Console.WriteLine(List_ReloadNames[i] + List_ReloadFast_Highest[i]);
+                //Console.WriteLine(List_ReloadNames[i] + List_ReloadBolt_Highest[i]); 
+                //Console.WriteLine(List_ReloadNames[i] + List_ReloadFastBolt_Highest[i]);
+            }
+            //BoltAnimation Name+Time
+            for (int i = 0; i < List_Bolt_Highest.Count; i++)
+            {
+                List_Bolt_Times.Add(List_BoltNames[i] + List_Bolt_Highest[i]);
+                //Console.WriteLine(List_BoltNames[i] + List_Bolt_Highest[i]);
+            }
+        }
+
+        //Intakes Weapon Mono paths and outputs their values into
+        //List<Gun> Guns
+        //List<Magazine> Magazines
+        static void WeaponAndMagazineValues(List<string> List_WeaponMonoPaths, string Name_Regex, string Number_Regex, string MagazineName_Regex, List<Gun> Guns, List<Magazine> Magazines, List<string> List_Reload_Times, List<string> List_ReloadBolt_Times, List<string> List_ReloadFast_Times, List<string> List_ReloadFastBolt_Times, List<string> List_Bolt_Times)
+        {
+            foreach (string MonoPath in List_WeaponMonoPaths)
+            {
+                bool rank = false;
+                bool DropOfFound = false;
+                bool MagFound = false;
+
+                int KeyFrameCount = 0;
+                int MagCount = 0;
+
+                Gun newGun = new Gun();
+                Magazine newMag = new Magazine();
+
+                foreach (string line in File.ReadAllLines(MonoPath))
+                {
+                    if (line.Contains("m_Name:"))
+                    {
+                        newGun.WeaponName = (Regex.Match(Regex.Replace(line, @"\d+_", ""), Name_Regex).Value).ToUpper().Replace("_", "").Replace("-", "");
+                    }
+
+                    if (line.Contains("WeaponType:"))
+                    {
+                        int type = int.Parse(line.Substring(14));
+                        switch (type)
+                        {
+                            case 0:
+                                newGun.WeaponType = "AR"; break;
+                            case 1:
+                                newGun.WeaponType = "DMR"; break;
+                            case 2:
+                                newGun.WeaponType = "SNIPER"; break;
+                            case 3:
+                                newGun.WeaponType = "LSG"; break;
+                            case 4:
+                                newGun.WeaponType = "LMG"; break;
+                            case 5:
+                                newGun.WeaponType = "SMG"; break;
+                            case 6:
+                                newGun.WeaponType = "PISTOL"; break;
+                            case 7:
+                                newGun.WeaponType = "AUTOMATIC PISTOL"; break;
+                            case 8:
+                                newGun.WeaponType = "HEAVY PISTOL"; break;
+                            case 9:
+                                newGun.WeaponType = "CARBINE"; break;
+                            case 10:
+                                newGun.WeaponType = "PDW"; break;
+                            case 11:
+                                newGun.WeaponType = "BR"; break;
+                        }
+                    }
+
+                    if (line.Contains("    RequiredRank: ") && !rank)
+                    {
+                        newGun.Level = float.Parse(Regex.Match(line, Number_Regex).Value);
+                        rank = true;
+                    }
+
+                    if (line.Contains("DamageOnInfantryBody:"))
+                    {
+                        newGun.InfantryDamage = float.Parse(Regex.Match(line, Number_Regex).Value);
+                    }
+
+                    if (line.Contains("DamageOnLightArmoredVehicles:"))
+                    {
+                        newGun.LightDamage = float.Parse(Regex.Match(line, Number_Regex).Value);
+                    }
+
+                    if (line.Contains("DamageOnHeavyHeavyVehicles: "))
+                    {
+                        newGun.HeavyDamage = float.Parse(Regex.Match(line, Number_Regex).Value);
+                    }
+
+                    if (line.Contains("VerticalMouse:"))
+                    {
+                        newGun.VerticalRecoil = float.Parse(Regex.Match(line, Number_Regex).Value);
+                    }
+
+                    if (line.Contains("HorizontalMouse:"))
+                    {
+                        newGun.HorizontalRecoil = float.Parse(Regex.Match(line, Number_Regex).Value);
+                    }
+
+                    if (line.Contains("FirstShotRecoil: "))
+                    {
+                        newGun.FirstShotKick = float.Parse(Regex.Match(line, Number_Regex).Value);
+                    }
+
+                    if (line.Contains("BulletVelocity:"))
+                    {
+                        newGun.Velocity = float.Parse(Regex.Match(line, Number_Regex).Value);
+                    }
+
+                    if (line.Contains("BaseHipFireAccuracy:"))
+                    {
+                        newGun.Acc1 = float.Parse(Regex.Match(line, Number_Regex).Value);
+                    }
+
+                    if (line.Contains("LowestHipFireAccuracy:"))
+                    {
+                        newGun.Acc2 = float.Parse(Regex.Match(line, Number_Regex).Value);
+                    }
+
+                    if (line.Contains("BaseADSFireAccuracy:"))
+                    {
+                        newGun.Acc3 = float.Parse(Regex.Match(line, Number_Regex).Value);
+                    }
+
+                    if (line.Contains("LowestADSFireAccuracy:"))
+                    {
+                        newGun.Acc4 = float.Parse(Regex.Match(line, Number_Regex).Value);
+                        newGun.Accuracy = (newGun.Acc1 + newGun.Acc2 + newGun.Acc3 + newGun.Acc4) / 4f;
+                    }
+
+                    if (line.Contains("RoundsPerMinute:"))
+                    {
+                        newGun.Firerate = float.Parse(Regex.Match(line, Number_Regex).Value);
+                    }
+
+                    if (line.Contains("ShotSoundDistance: "))
+                    {
+                        newGun.SoundSpread = float.Parse(Regex.Match(line, Number_Regex).Value);
+                    }
+
+                    if (line.Contains("MuzzleScale: "))
+                    {
+                        newGun.MuzzleFlash = float.Parse(Regex.Match(line, Number_Regex).Value);
+                    }
+
+                    if (line.Contains("Weigth: "))
+                    {
+                        newGun.Weight = float.Parse(Regex.Match(line, Number_Regex).Value);
+                        newGun.Control = (-2f / 7f) * newGun.Weight + 8f / 7f;
+                    }
+
+                    if (line.Contains("AdsTime: "))
+                    {
+                        newGun.AimDownTime = float.Parse(Regex.Match(line, Number_Regex).Value);
+                    }
+
+                    if (line.Contains("PlayerRunningSpeed: "))
+                    {
+                        newGun.RunningSpeed = float.Parse(Regex.Match(line, Number_Regex).Value);
+                    }
+
+                    if (line.Contains("ReloadSpeed: "))
+                    {
+                        newGun.ReloadSpeed = float.Parse(Regex.Match(line, Number_Regex).Value);
+                    }
+
+                    if (line.Contains("DrawSpeed: "))
+                    {
+                        newGun.DrawSpeed = float.Parse(Regex.Match(line, Number_Regex).Value);
+                    }
+
+                    if (line.Contains("BoltActionSpeed: "))
+                    {
+                        newGun.BoltSpeed = float.Parse(Regex.Match(line, Number_Regex).Value);
+                    }
+
+                    if (line.Contains("DefaultRoundsPerMagazine:"))
+                    {
+                        newGun.DefaultMagazineSize = float.Parse(Regex.Match(line, Number_Regex).Value);
+                    }
+
+                    if (line.Contains("DropOf:"))
+                    {
+                        DropOfFound = true;
+                    }
+
+                    if (DropOfFound)
+                    {
+                        KeyFrameCount++;
+                    }
+
+                    switch (KeyFrameCount)
+                    {
+                        case 5: newGun.Key1Time = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 6: newGun.Key1Value = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 7: newGun.Key1InSlope = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 8: newGun.Key1OutSlope = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 9: newGun.Key1TangentMode = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 10: newGun.Key1WeightedMode = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 11: newGun.Key1InWeight = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 12: newGun.Key1OutWeight = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+
+                        case 14: newGun.Key2Time = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 15: newGun.Key2Value = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 16: newGun.Key2InSlope = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 17: newGun.Key2OutSlope = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 18: newGun.Key2TangentMode = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 19: newGun.Key2WeightedMode = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 20: newGun.Key2InWeight = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 21: newGun.Key2OutWeight = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+
+                        case 23: newGun.Key3Time = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 24: newGun.Key3Value = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 25: newGun.Key3InSlope = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 26: newGun.Key3OutSlope = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 27: newGun.Key3TangentMode = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 28: newGun.Key3WeightedMode = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 29: newGun.Key3InWeight = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                        case 30: newGun.Key3OutWeight = float.Parse(Regex.Match(input: line, Number_Regex).Value); break;
+                    }
+
+                    if (line.Contains("  - ID:"))
+                    {
+                        MagFound = true;
+                    }
+
+                    if (MagFound)
+                    {
+                        MagCount++;
+                    }
+
+                    switch (MagCount)
+                    {
+
+                        case 2:
+                            newMag.WeaponName = newGun.WeaponName;
+                            newMag.Name = Regex.Match(input: line, MagazineName_Regex).Value;
+                            break;
+                        case 24:
+                            newMag.Ammo = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 29:
+                            newMag.ADD_ReloadSpeed = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 30:
+                            newMag.ReloadSpeed = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 32:
+                            newMag.ADD_DrawSpeed = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 33:
+                            newMag.DrawSpeed = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 35:
+                            newMag.ADD_AimDownTime = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 36:
+                            newMag.AimDownTime = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 38:
+                            newMag.ADD_Weight = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 39:
+                            newMag.Weight = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 41:
+                            newMag.ADD_RunningSpeed = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 42:
+                            newMag.RunningSpeed = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 44:
+                            newMag.ADD_VerticalRecoil = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 45:
+                            newMag.VerticalRecoil = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 47:
+                            newMag.ADD_HorizontalRecoil = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 48:
+                            newMag.HorizontalRecoil = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 50:
+                            newMag.ADD_FirstShotKick = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 51:
+                            newMag.FirstShotKick = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 53:
+                            newMag.ADD_Firerate = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 54:
+                            newMag.Firerate = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 56:
+                            newMag.ADD_SoundSpread = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 57:
+                            newMag.SoundSpread = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 59:
+                            newMag.ADD_MuzzleFlash = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 60:
+                            newMag.MuzzleFlash = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 63:
+                            newMag.ADD_Velocity = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 64:
+                            newMag.Velocity = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 69:
+                            newMag.ADD_Accuracy = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 70:
+                            newMag.Accuracy = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 75:
+                            newMag.ADD_InfantryDamage = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 76:
+                            newMag.InfantryDamage = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 78:
+                            newMag.ADD_LightDamage = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 79:
+                            newMag.LightDamage = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 81:
+                            newMag.ADD_HeavyDamage = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 82:
+                            newMag.HeavyDamage = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 84:
+                            newMag.ADD_BoltSpeed = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 85:
+                            newMag.BoltSpeed = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            Magazines.Add(newMag); //Adds new magazine to the list "Magazines"
+                            MagCount = 0;
+                            MagFound = false;
+                            break;
+                    }
+                }
+
+                foreach (string time in List_Reload_Times)
+                {
+                    if (time.Contains(newGun.WeaponName))
+                    {
+                        string pattern3 = @":\s*([0-9]+(?:\.[0-9]+)?)";
+                        float Reload_time = float.Parse((Regex.Match(time, pattern3).Groups[1]).Value);
+                        newGun.Reload_time = Reload_time / newGun.ReloadSpeed;
+                    }
+                }
+
+                foreach (string time in List_ReloadFast_Times)
+                {
+                    if (time.Contains(newGun.WeaponName))
+                    {
+                        string pattern3 = @":\s*([0-9]+(?:\.[0-9]+)?)";
+                        float Reload_time = float.Parse((Regex.Match(time, pattern3).Groups[1]).Value);
+                        newGun.ReloadFast_time = Reload_time / newGun.ReloadSpeed;
+                    }
+                }
+
+                foreach (string time in List_ReloadBolt_Times)
+                {
+                    if (time.Contains(newGun.WeaponName))
+                    {
+                        string pattern3 = @":\s*([0-9]+(?:\.[0-9]+)?)";
+                        float Reload_time = float.Parse((Regex.Match(time, pattern3).Groups[1]).Value);
+                        newGun.ReloadBolt_time = Reload_time / newGun.ReloadSpeed;
+                    }
+                }
+
+                foreach (string time in List_ReloadFastBolt_Times)
+                {
+                    if (time.Contains(newGun.WeaponName))
+                    {
+                        string pattern3 = @":\s*([0-9]+(?:\.[0-9]+)?)";
+                        float Reload_time = float.Parse((Regex.Match(time, pattern3).Groups[1]).Value);
+                        newGun.ReloadFastBolt_time = Reload_time / newGun.ReloadSpeed;
+                    }
+                }
+
+                Guns.Add(newGun);
+            }
+        }
+
+        //Intakes Attachment Mono paths and outputs their values into
+        //List<Attachment> Attachments
+        static void AttachmentValues(List<string> List_AttachmentMonoPaths, string Name_Regex, string Number_Regex, List<Attachment> Attachments)
+        {
+            foreach (string Attachment_Path in List_AttachmentMonoPaths)
+            {
+                bool foundSettingString = false;
+                int AttachmentCount = 0;
+                Attachment newAtt = new Attachment();
+
+                foreach (string line in File.ReadAllLines(Attachment_Path))
+                {
+
+                    if (line.Contains("m_Name:"))
+                    {
+                        newAtt.AttachmentName = (Regex.Match(Regex.Replace(input: line, @"\d+_", ""), @"(?<=m_Name:\s).+").Value).Replace("_", " ");
+                    }
+
+                    if (line.Contains("Settings:"))
+                    {
+                        foundSettingString = true;
+                    }
+
+                    if (foundSettingString)
+                    {
+                        AttachmentCount++;
+                    }
+
+                    switch (AttachmentCount)
+                    {
+                        case 3:
+                            newAtt.ADD_ReloadSpeed = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 4:
+                            newAtt.ReloadSpeed = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 6:
+                            newAtt.ADD_DrawSpeed = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 7:
+                            newAtt.DrawSpeed = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                        case 9:
+                            newAtt.ADD_AimDownTime = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 10:
+                            newAtt.AimDownTime = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 12:
+                            newAtt.ADD_Weight = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 13:
+                            newAtt.Weight = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 15:
+                            newAtt.ADD_RunningSpeed = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 16:
+                            newAtt.RunningSpeed = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 18:
+                            newAtt.ADD_VerticalRecoil = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 19:
+                            newAtt.VerticalRecoil = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 21:
+                            newAtt.ADD_HorizontalRecoil = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 22:
+                            newAtt.HorizontalRecoil = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 24:
+                            newAtt.ADD_FirstShotKick = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 25:
+                            newAtt.FirstShotKick = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 27:
+                            newAtt.ADD_Firerate = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 28:
+                            newAtt.Firerate = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 30:
+                            newAtt.ADD_SoundSpread = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 31:
+                            newAtt.SoundSpread = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 33:
+                            newAtt.ADD_MuzzleFlash = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 34:
+                            newAtt.MuzzleFlash = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 37:
+                            newAtt.ADD_Velocity = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 38:
+                            newAtt.Velocity = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 43:
+                            newAtt.ADD_Accuracy = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 44:
+                            newAtt.Accuracy = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 49:
+                            newAtt.ADD_InfantryDamage = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 50:
+                            newAtt.InfantryDamage = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 52:
+                            newAtt.ADD_LightDamage = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 53:
+                            newAtt.LightDamage = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 55:
+                            newAtt.ADD_HeavyDamage = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 56:
+                            newAtt.HeavyDamage = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 58:
+                            newAtt.ADD_BoltSpeed = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+
+                        case 59:
+                            newAtt.BoltSpeed = float.Parse(Regex.Match(input: line, Number_Regex).Value);
+                            break;
+                    }
+                }
+                Attachments.Add(newAtt);
+            }
+        }
+
+        //Writes contents of  List<Gun> Guns, List<Attachment> Attachments and List<Magazine> Magazines to their own CSV files.
+        static void WriteCSV(string CSV_Location, string Gun_CSV_HEADER, string Attachment_CSV_HEADER, string MagazineCSV_HEADER, List<Gun> Guns, List<Attachment> Attachments, List<Magazine> Magazines)
+        {
+
+            using (var INTO_CSV = new StreamWriter(CSV_Location + "guns.csv"))
+            {
+                INTO_CSV.WriteLine("Name;Type;Level;Damage;Light Damage;Heavy Damage;Vert Recoil;Hor Recoil;First Shot Kick;Velocity;Acc1;Acc2;Acc3;Acc4;Accuracy;Firerate;Sound Spread;Muzzle Flash;Control;Weight;ADS;Running Speed;Reload Speed;Reload;Drop Reload;Empty Reload;Empty Drop Reload;Draw Speed;Bolt Speed;Magazine Size;Key1Time;Key1Value;Key1InSlope;Key1OutSlope;Key1TangentMode;Key1WeightedMode;Key1InWeight;Key1OutWeight;Fall-off START;Key2Value;Key2InSlope;Key2OutSlope;Key2TangentMode;Key2WeightedMode;Key2InWeight;Key2OutWeight;Fall-off END;Min Damage;Key3InSlope;Key3OutSlope;Key3TangentMode;Key3WeightedMode;Key3InWeight;Key3OutWeight");
+
+                foreach (var gun in Guns)
+                {
+                    INTO_CSV.WriteLine($"{gun.WeaponName};{gun.WeaponType};{gun.Level};{gun.InfantryDamage};{gun.LightDamage};{gun.HeavyDamage};{gun.VerticalRecoil};{gun.HorizontalRecoil};{gun.FirstShotKick};{gun.Velocity};{gun.Acc1};{gun.Acc2};{gun.Acc3};{gun.Acc4};{gun.Accuracy};{gun.Firerate};{gun.SoundSpread};{gun.MuzzleFlash};{gun.Control};{gun.Weight};{gun.AimDownTime};{gun.RunningSpeed};{gun.ReloadSpeed};{gun.Reload_time};{gun.ReloadFast_time};{gun.ReloadBolt_time};{gun.ReloadFastBolt_time};{gun.DrawSpeed};{gun.BoltSpeed};{gun.DefaultMagazineSize};{gun.Key1Time};{gun.Key1Value};{gun.Key1InSlope};{gun.Key1OutSlope};{gun.Key1TangentMode};{gun.Key1WeightedMode};{gun.Key1InWeight};{gun.Key1OutWeight};{gun.Key2Time};{gun.Key2Value};{gun.Key2InSlope};{gun.Key2OutSlope};{gun.Key2TangentMode};{gun.Key2WeightedMode};{gun.Key2InWeight};{gun.Key2OutWeight};{gun.Key3Time};{gun.Key3Value};{gun.Key3InSlope};{gun.Key3OutSlope};{gun.Key3TangentMode};{gun.Key3WeightedMode};{gun.Key3InWeight};{gun.Key3OutWeight}");
+                }
+
+            }
+
+            using (var INTO_CSV = new StreamWriter(CSV_Location + "attachments.csv"))
+            {
+                INTO_CSV.WriteLine(Attachment_CSV_HEADER);
+                foreach (var attachment in Attachments)
+                {
+                    INTO_CSV.WriteLine($"{attachment.AttachmentName};;{attachment.InfantryDamage};{attachment.LightDamage};{attachment.HeavyDamage};{attachment.VerticalRecoil};{attachment.HorizontalRecoil};{attachment.FirstShotKick};{attachment.Velocity};{attachment.Accuracy};{attachment.Firerate};{attachment.SoundSpread};{attachment.MuzzleFlash};{attachment.Weight};{attachment.AimDownTime};{attachment.RunningSpeed};{attachment.ReloadSpeed};{attachment.DrawSpeed};{attachment.BoltSpeed}");
+                }
+            }
+
+            using (var INTO_CSV = new StreamWriter(CSV_Location + "ADD_attachments.csv"))
+            {
+                INTO_CSV.WriteLine(Attachment_CSV_HEADER);
+
+                foreach (var attachment in Attachments)
+                {
+                    INTO_CSV.WriteLine($"{attachment.AttachmentName};;{attachment.ADD_InfantryDamage};{attachment.ADD_LightDamage};{attachment.ADD_HeavyDamage};{attachment.ADD_VerticalRecoil};{attachment.ADD_HorizontalRecoil};{attachment.ADD_FirstShotKick};{attachment.ADD_Velocity};{attachment.ADD_Accuracy};{attachment.ADD_Firerate};{attachment.ADD_SoundSpread};{attachment.ADD_MuzzleFlash};{attachment.ADD_Weight};{attachment.ADD_AimDownTime};{attachment.ADD_RunningSpeed};{attachment.ADD_ReloadSpeed};{attachment.ADD_DrawSpeed};{attachment.ADD_BoltSpeed}");
+                }
+            }
+
+            using (var INTO_CSV = new StreamWriter(CSV_Location + "mags.csv"))
+            {
+                INTO_CSV.WriteLine(MagazineCSV_HEADER);
+                foreach (var magazine in Magazines)
+                {
+                    INTO_CSV.WriteLine($"{magazine.WeaponName};{magazine.Name};{magazine.InfantryDamage};{magazine.LightDamage};{magazine.HeavyDamage};{magazine.VerticalRecoil};{magazine.HorizontalRecoil};{magazine.FirstShotKick};{magazine.Velocity};{magazine.Accuracy};{magazine.Firerate};{magazine.SoundSpread};{magazine.MuzzleFlash};{magazine.Weight};{magazine.AimDownTime};{magazine.RunningSpeed};{magazine.ReloadSpeed};{magazine.DrawSpeed};{magazine.BoltSpeed};{magazine.Ammo}");
+                }
+            }
+
+            using (var INTO_CSV = new StreamWriter(CSV_Location + "ADD_mags.csv"))
+            {
+                INTO_CSV.WriteLine(MagazineCSV_HEADER);
+                foreach (var magazine in Magazines)
+                {
+                    INTO_CSV.WriteLine($"{magazine.WeaponName};{magazine.Name};{magazine.ADD_InfantryDamage};{magazine.ADD_LightDamage};{magazine.ADD_HeavyDamage};{magazine.ADD_VerticalRecoil};{magazine.ADD_HorizontalRecoil};{magazine.ADD_FirstShotKick};{magazine.ADD_Velocity};{magazine.ADD_Accuracy};{magazine.ADD_Firerate};{magazine.ADD_SoundSpread};{magazine.ADD_MuzzleFlash};{magazine.ADD_Weight};{magazine.ADD_AimDownTime};{magazine.ADD_RunningSpeed};{magazine.ADD_ReloadSpeed};{magazine.ADD_DrawSpeed};{magazine.ADD_BoltSpeed}");
+                }
+            }
+        }
+    }
+}
