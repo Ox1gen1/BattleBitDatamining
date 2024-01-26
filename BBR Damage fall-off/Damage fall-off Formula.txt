@@ -1,0 +1,10 @@
+Excel function of the math formula for all non-SNIPER/non-DMR/non-GADGET weapons.
+This formula was not made by me, but by a fellow stat nerd and a mathematician potestasnecis.
+
+IF(M<=FALL_START;DAMAGE;IF(M>=FALL_END;DAMAGE*MIN_DMG;(DAMAGE-(DAMAGE*MIN_DMG))*(1-(3*((M-FALL_START)/(FALL_END-FALL_START))^2)+(2*((M-FALL_START)/(FALL_END-FALL_START))^3))+(DAMAGE*MIN_DMG))))
+
+M= Distance/Meters
+DAMAGE= Base damage of a weapon
+MIN_DMG= Minimum damage multiplier (Such as 0.35, you can figure it out by shooting at max range targets and seeing what is the lowest damage you can do and dividing that by base damage its usually the same across a weapon type)
+FALL_START= Damage fall-off START point
+FALL_END= Damage fall-off END point
