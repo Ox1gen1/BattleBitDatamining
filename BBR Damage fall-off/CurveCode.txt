@@ -1,0 +1,106 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.IO;
+
+public class Curve : MonoBehaviour
+{
+
+string filename = ""; 
+
+//Made By Ox1gen.
+//How to use, Input Keyframe values (X/Y, In/Out tangent/weight and WeightMode)
+//Save (CTRL+S) and Drag into Objects Components (Where AnimationCurves are made)
+//Press the "Play" Button.
+//Refresh Assets tab, a CSV file named "DMR_Values.CSV" should appear in the Assets tab.
+
+
+public AnimationCurve curve;
+
+    Keyframe[] ks = new Keyframe[3];
+    float[] Num = new float[1201];
+
+
+    public void Start()
+    {
+        //Keyframe Coordinates and Values.
+        //IF Weighted mode is 2, then it's WeightedMode.Out
+        //IF Weighted mode is 0, then it's WeightedMode.None
+        filename = Application.dataPath + "/AK74.csv";
+        //1st Keyframe
+        ks[0] = new Keyframe(0f, 1f);     //Key1Time + Key1Value
+        ks[0].inTangent = 0f;             //Key1InSlope
+        ks[0].outTangent= 0f;             //Key1OutSlope
+        ks[0].weightedMode=WeightedMode.None; //Change WeightedMode ( None/0 | Out/2 )
+        ks[0].inWeight = 0f;              //Key1InWeight
+        ks[0].outWeight = 0f;             //Key1OutWeight
+
+
+        //2nd Keyframe
+        ks[1] = new Keyframe(200f, 1f);
+        ks[1].inTangent = 0f; 
+        ks[1].outTangent= 0f; 
+        ks[1].weightedMode=WeightedMode.None; //Change WeightedMode ( None | Out )
+        ks[1].inWeight = 0f; 
+        ks[1].outWeight = 0f; 
+
+
+        //3rd Keyframe
+        ks[2] = new Keyframe(650f, 0.35f);
+        ks[2].inTangent = 0f;
+        ks[2].outTangent= 0f;
+        ks[2].weightedMode=WeightedMode.None; //Change WeightedMode ( None | Out )
+        ks[2].inWeight = 0f;
+        ks[2].outWeight = 0f;
+
+
+        curve = new AnimationCurve(ks);
+        
+        curve.preWrapMode = WrapMode.ClampForever;
+        curve.postWrapMode = WrapMode.ClampForever;
+       
+       //##############################################//
+     
+        
+        //CSV Write Start
+        
+        //Creates Evaluation based on Distance.
+        for(int Meter=0; Meter <= 1200;Meter++)
+        {
+            Num[Meter] = curve.Evaluate(Meter);
+            Debug.Log(Num[Meter]);
+        }
+        Debug.Log("Press Spacebar to Create/Update DMR_Values!");
+        //Name of the file where numbers go.
+        }
+
+    void Update()
+    {   //Press spacebar to create/update Damage fall-off curve and CSV.
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            WriteCSV();   
+        }
+       
+        transform.position = new Vector3(transform.position.x, curve.Evaluate(Time.time), transform.position.z);}
+
+    //Code for the writing CSV file.
+    public void WriteCSV()
+    {   
+        
+            TextWriter tw = new StreamWriter(filename, false);
+            tw.WriteLine("Distance; Value");
+            tw.Close();
+        
+            tw= new StreamWriter(filename, true);
+
+
+        for(int i=0; i<=1200; i++)
+        {
+            //Replace ; with , if it doesn't come out as shown in the guide.
+            tw.WriteLine(i + ";"+ Num[i]);
+        }
+            tw.Close();
+            Debug.Log("DMR_Values.CSV CREATED/UPDATED! (REFRESH ASSETS TAB!)");
+        
+    }
+}
