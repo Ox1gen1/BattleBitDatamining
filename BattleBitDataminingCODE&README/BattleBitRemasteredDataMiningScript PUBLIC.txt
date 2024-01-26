@@ -165,10 +165,10 @@ namespace DataminingScript
 
             //comma version: Name,Type,Level,Damage,Light Damage,Heavy Damage,Vert Recoil,Hor Recoil,First Shot Kick,Velocity,Acc1,Acc2,Acc3,Acc4,Accuracy,Firerate,Sound Spread,Muzzle Flash,Control,Weight,ADS,Running Speed,Reload Speed,Reload,Drop Reload,Empty Reload,Empty Drop Reload,Draw Speed,Bolt Speed,Magazine Size,Key1Time,Key1Value,Key1InSlope,Key1OutSlope,Key1TangentMode,Key1WeightedMode,Key1InWeight,Key1OutWeight,Fall-off START,Key2Value,Key2InSlope,Key2OutSlope,Key2TangentMode,Key2WeightedMode,Key2InWeight,Key2OutWeight,Fall-off END,Min Damage,Key3InSlope,Key3OutSlope,Key3TangentMode,Key3WeightedMode,Key3InWeight,Key3OutWeight
             string Gun_CSV_HEADER = "Name;Type;Level;Damage;Light Damage;Heavy Damage;Vert Recoil;Hor Recoil;First Shot Kick;Velocity;BaseHipFireAccuracy;LowestHipFireAccuracy;BaseADSFireAccuracy;LowestADSFireAccuracy;Accuracy;Firerate;Sound Spread;Muzzle Flash;Control;Weight;ADS;Running Speed;Reload Speed;Reload;Drop Reload;Empty Reload;Empty Drop Reload;Draw Speed;DrawIN;DrawOUT;Bolt Speed;Magazine Size;Key1Time;Key1Value;Key1InSlope;Key1OutSlope;Key1TangentMode;Key1WeightedMode;Key1InWeight;Key1OutWeight;Fall-off START;Key2Value;Key2InSlope;Key2OutSlope;Key2TangentMode;Key2WeightedMode;Key2InWeight;Key2OutWeight;Fall-off END;Min Damage;Key3InSlope;Key3OutSlope;Key3TangentMode;Key3WeightedMode;Key3InWeight;Key3OutWeight";
-            
+
             //comma version: Attachment,Type,Damage,Light Damage,Heavy Damage,Vert Recoil,Hor Recoil,First Shot Kick,Velocity,Accuracy,Firerate,Sound Spread,Muzzle Flash,Control,ADS,Running Speed,Reload,Draw Speed,Bolt Speed
             string Attachment_CSV_HEADER = "Attachment;Type;Damage;Light Damage;Heavy Damage;Vert Recoil;Hor Recoil;First Shot Kick;Velocity;Accuracy;Firerate;Sound Spread;Muzzle Flash;Control;ADS;Running Speed;Reload;Draw Speed;Bolt Speed";
-            
+
             //comma version: Gun,Magazine,Damage,Light Damage,Heavy Damage,Vert Recoil,Hor Recoil,First Shot Kick,Velocity,Accuracy,Firerate,Sound Spread,Muzzle Flash,Control,ADS,Running Speed,Reload,Draw Speed,Bolt Speed,Magazine Size
             string MagazineCSV_HEADER = "Gun;Magazine;Damage;Light Damage;Heavy Damage;Vert Recoil;Hor Recoil;First Shot Kick;Velocity;Accuracy;Firerate;Sound Spread;Muzzle Flash;Control;ADS;Running Speed;Reload;Draw Speed;Bolt Speed;Magazine Size";
 
@@ -224,7 +224,7 @@ namespace DataminingScript
                 List_DrawINMetaAnimationPaths,
                 List_DrawOUTMetaAnimationPaths);
 
-            Console.WriteLine("Sort took: " + (time.ElapsedMilliseconds /  1000f));
+            Console.WriteLine("Sort took: " + (time.ElapsedMilliseconds / 1000f));
             time.Restart();
 
             //Makes all the accurate animation related times
@@ -316,15 +316,15 @@ namespace DataminingScript
             {
                 if (!Monobehaviour_Path.Contains(".meta")) //Excludes all .meta files as they have no relevant information
                 {
-                    
+
                     foreach (string line in File.ReadLines(Monobehaviour_Path))//Reads each line of the file one by one
                     {
 
-                        if (line.Contains("WeaponType:")&& !Monobehaviour_Path.Contains("0_EmptyGun.asset")) //Weapon files always have the text "WeaponType:" in them, also excluding path manually as it's irrelevant
-                        {  
+                        if (line.Contains("WeaponType:") && !Monobehaviour_Path.Contains("0_EmptyGun.asset")) //Weapon files always have the text "WeaponType:" in them, also excluding path manually as it's irrelevant
+                        {
                             List_WeaponMonoPaths.Add(Monobehaviour_Path);
                             break;
-                            
+
                         }
 
                         if (line.Contains("  Pistol_Kills:")) //Attachment files always have the text "Pistol_Kills" in them
@@ -342,7 +342,7 @@ namespace DataminingScript
                 int i = 0;
                 int j = 0;
 
-                if (!Prefab_Path.Contains( "FirstPersonController.prefab") && !Prefab_Path.Contains("EmptyGun.prefab") && !Prefab_Path.Contains("ThirdPersonController.prefab")&& !Prefab_Path.Contains(".meta") && !Prefab_Path.Contains("USA") && !Prefab_Path.Contains("USV2") && !Prefab_Path.Contains("RU") && !Prefab_Path.Contains("RUV2")) //Excluding paths manually to read useless files
+                if (!Prefab_Path.Contains("FirstPersonController.prefab") && !Prefab_Path.Contains("EmptyGun.prefab") && !Prefab_Path.Contains("ThirdPersonController.prefab") && !Prefab_Path.Contains(".meta") && !Prefab_Path.Contains("USA") && !Prefab_Path.Contains("USV2") && !Prefab_Path.Contains("RU") && !Prefab_Path.Contains("RUV2")) //Excluding paths manually to read useless files
                 {
                     //Console.WriteLine(Prefab_Path);
                     foreach (string line in File.ReadLines(Prefab_Path))
@@ -354,7 +354,7 @@ namespace DataminingScript
 
                         if (i > 9)
                         {
-                            List_WeaponPrefabPaths.Add(Prefab_Path); 
+                            List_WeaponPrefabPaths.Add(Prefab_Path);
                             break;
                         }
                     }
@@ -578,7 +578,7 @@ namespace DataminingScript
                     float register;
                     foreach (string GUID in List_Reload_GUID) //Reads list of GUID's one by one
                     {
-                        
+
                         if (PrefabLine.Contains(GUID)) //If string GUID is found in a weapon prefab file.
                         {
                             foreach (string AnimLine in File.ReadAllLines(List_Reload_PATH[List_Reload_GUID.IndexOf(GUID)]))//Reads the reload file, which is located in the same line in a list as the GUID which was found. Cuz they are paralel
@@ -600,7 +600,7 @@ namespace DataminingScript
                         }
                         if (highest != 0)
                         {
-                            List_Reload_Times.Add(Path.ToUpper().Substring(85).Replace(".PREFAB", "").Replace("OS14_", "").Replace("VITYAZ", "").Replace("-", "").Replace("REMINGTON700", "REM700").Replace("ULTIMAX", "ULTIMAX100").Replace("MK14", "MKEBR") + ":" + highest);
+                            List_Reload_Times.Add(Path.ToUpper().Substring(PrefabInstance_Location.Length).Replace(".PREFAB", "").Replace("OS14_", "").Replace("VITYAZ", "").Replace("-", "").Replace("REMINGTON700", "REM700").Replace("ULTIMAX", "ULTIMAX100").Replace("MK14", "MKEBR") + ":" + highest);
                             break;
                         }
                     }
@@ -636,7 +636,7 @@ namespace DataminingScript
                         }
                         if (highest != 0)
                         {
-                            List_ReloadFast_Times.Add(Path.ToUpper().Substring(85).Replace(".PREFAB", "").Replace("OS14_", "").Replace("VITYAZ", "").Replace("-", "").Replace("REMINGTON700", "REM700").Replace("ULTIMAX", "ULTIMAX100").Replace("MK14", "MKEBR") + ":" + highest);
+                            List_ReloadFast_Times.Add(Path.ToUpper().Substring(PrefabInstance_Location.Length).Replace(".PREFAB", "").Replace("OS14_", "").Replace("VITYAZ", "").Replace("-", "").Replace("REMINGTON700", "REM700").Replace("ULTIMAX", "ULTIMAX100").Replace("MK14", "MKEBR") + ":" + highest);
                             break;
                         }
                     }
@@ -672,7 +672,7 @@ namespace DataminingScript
                         }
                         if (highest != 0)
                         {
-                            List_ReloadBolt_Times.Add(Path.ToUpper().Substring(85).Replace(".PREFAB", "").Replace("OS14_", "").Replace("VITYAZ", "").Replace("-", "").Replace("REMINGTON700", "REM700").Replace("ULTIMAX", "ULTIMAX100").Replace("MK14", "MKEBR") + ":" + highest);
+                            List_ReloadBolt_Times.Add(Path.ToUpper().Substring(PrefabInstance_Location.Length).Replace(".PREFAB", "").Replace("OS14_", "").Replace("VITYAZ", "").Replace("-", "").Replace("REMINGTON700", "REM700").Replace("ULTIMAX", "ULTIMAX100").Replace("MK14", "MKEBR") + ":" + highest);
                             break;
                         }
 
@@ -710,7 +710,7 @@ namespace DataminingScript
                         }
                         if (highest != 0)
                         {
-                            List_ReloadFastBolt_Times.Add(Path.ToUpper().Substring(85).Replace(".PREFAB", "").Replace("OS14_", "").Replace("VITYAZ", "").Replace("-", "").Replace("REMINGTON700", "REM700").Replace("ULTIMAX", "ULTIMAX100").Replace("MK14", "MKEBR") + ":" + highest);
+                            List_ReloadFastBolt_Times.Add(Path.ToUpper().Substring(PrefabInstance_Location.Length).Replace(".PREFAB", "").Replace("OS14_", "").Replace("VITYAZ", "").Replace("-", "").Replace("REMINGTON700", "REM700").Replace("ULTIMAX", "ULTIMAX100").Replace("MK14", "MKEBR") + ":" + highest);
                             break;
                         }
                     }
@@ -742,7 +742,7 @@ namespace DataminingScript
                         }
                         if (highest != 0)
                         {
-                            List_Bolt_Times.Add(Path.ToUpper().Substring(85).Replace(".PREFAB", "").Replace("OS14_", "").Replace("VITYAZ", "").Replace("-", "").Replace("REMINGTON700", "REM700").Replace("ULTIMAX", "ULTIMAX100").Replace("MK14", "MKEBR") + ":" + highest);
+                            List_Bolt_Times.Add(Path.ToUpper().Substring(PrefabInstance_Location.Length).Replace(".PREFAB", "").Replace("OS14_", "").Replace("VITYAZ", "").Replace("-", "").Replace("REMINGTON700", "REM700").Replace("ULTIMAX", "ULTIMAX100").Replace("MK14", "MKEBR") + ":" + highest);
                             break;
                         }
                     }
@@ -778,7 +778,7 @@ namespace DataminingScript
                         }
                         if (highest != 0)
                         {
-                            List_DrawIN_Times.Add(Path.ToUpper().Substring(85).Replace(".PREFAB", "").Replace("OS14_", "").Replace("VITYAZ", "").Replace("-", "").Replace("REMINGTON700", "REM700").Replace("ULTIMAX", "ULTIMAX100").Replace("MK14", "MKEBR") + ":" + highest);
+                            List_DrawIN_Times.Add(Path.ToUpper().Substring(PrefabInstance_Location.Length).Replace(".PREFAB", "").Replace("OS14_", "").Replace("VITYAZ", "").Replace("-", "").Replace("REMINGTON700", "REM700").Replace("ULTIMAX", "ULTIMAX100").Replace("MK14", "MKEBR") + ":" + highest);
                             break;
                         }
                     }
@@ -816,7 +816,7 @@ namespace DataminingScript
                         }
                         if (highest != 0)
                         {
-                            List_DrawOUT_Times.Add(Path.ToUpper().Substring(85).Replace(".PREFAB", "").Replace("OS14_", "").Replace("VITYAZ", "").Replace("-", "").Replace("REMINGTON700", "REM700").Replace("ULTIMAX", "ULTIMAX100").Replace("MK14", "MKEBR") + ":" + highest);
+                            List_DrawOUT_Times.Add(Path.ToUpper().Substring(PrefabInstance_Location.Length).Replace(".PREFAB", "").Replace("OS14_", "").Replace("VITYAZ", "").Replace("-", "").Replace("REMINGTON700", "REM700").Replace("ULTIMAX", "ULTIMAX100").Replace("MK14", "MKEBR") + ":" + highest);
                             break;
                         }
                     }
@@ -943,7 +943,7 @@ namespace DataminingScript
 
                     if (line.Contains("RoundsPerMinute:"))
                     {
-                        newGun.Firerate = float.Parse(  line.Substring(20));
+                        newGun.Firerate = float.Parse(line.Substring(20));
                     }
 
                     if (line.Contains("ShotSoundDistance: "))
@@ -1207,7 +1207,7 @@ namespace DataminingScript
                     {
                         string pattern3 = @":\s*([0-9]+(?:\.[0-9]+)?)";
                         float Bolt_time = float.Parse((Regex.Match(time, pattern3).Groups[1]).Value);
-                        newGun.Firerate = 60f/(Bolt_time / newGun.BoltSpeed); //Turns bolt time into a firerate, Firerate = 60s/Bolt time (Rounds per minute)
+                        newGun.Firerate = 60f / (Bolt_time / newGun.BoltSpeed); //Turns bolt time into a firerate, Firerate = 60s/Bolt time (Rounds per minute)
                     }
                 }
 
