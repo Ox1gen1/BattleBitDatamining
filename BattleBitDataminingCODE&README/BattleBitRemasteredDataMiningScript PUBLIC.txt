@@ -1,7 +1,6 @@
-
+using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-
 namespace DataminingScript
 {
     class Gun
@@ -24,6 +23,7 @@ namespace DataminingScript
         public float Firerate { get; set; }
         public float SoundSpread { get; set; }
         public float MuzzleFlash { get; set; }
+        public float MuzzleChance { get; set; }
         public float Weight { get; set; }
         public float Control { get; set; }
         public float AimDownTime { get; set; }
@@ -35,11 +35,10 @@ namespace DataminingScript
         public float ReloadFastBolt_time { get; set; }
         public float DrawIN_time { get; set; }
         public float DrawOUT_time { get; set; }
-
+        public float MagCheck_time {  get; set; }
         public float DrawSpeed { get; set; }
         public float BoltSpeed { get; set; }
         public float DefaultMagazineSize { get; set; }
-
         public float Key1Time { get; set; }
         public float Key1Value { get; set; }
         public float Key1InSlope { get; set; }
@@ -48,7 +47,6 @@ namespace DataminingScript
         public float Key1WeightedMode { get; set; }
         public float Key1InWeight { get; set; }
         public float Key1OutWeight { get; set; }
-
         public float Key2Time { get; set; }
         public float Key2Value { get; set; }
         public float Key2InSlope { get; set; }
@@ -57,7 +55,6 @@ namespace DataminingScript
         public float Key2WeightedMode { get; set; }
         public float Key2InWeight { get; set; }
         public float Key2OutWeight { get; set; }
-
         public float Key3Time { get; set; }
         public float Key3Value { get; set; }
         public float Key3InSlope { get; set; }
@@ -66,10 +63,20 @@ namespace DataminingScript
         public float Key3WeightedMode { get; set; }
         public float Key3InWeight { get; set; }
         public float Key3OutWeight { get; set; }
+        public float Key4Time { get; set; }
+        public float Key4Value { get; set; }
+        public float Key4InSlope { get; set; }
+        public float Key4OutSlope { get; set; }
+        public float Key4TangentMode { get; set; }
+        public float Key4WeightedMode { get; set; }
+        public float Key4InWeight { get; set; }
+        public float Key4OutWeight { get; set; }
+        public float Headshot_Multiplier { get; set; }
     }
     class Attachment
     {
         public string AttachmentName { get; set; }
+        public string AttachmentType { get; set; }
         public float InfantryDamage { get; set; }
         public float LightDamage { get; set; }
         public float HeavyDamage { get; set; }
@@ -144,39 +151,36 @@ namespace DataminingScript
         public float ADD_ReloadSpeed { get; set; }
         public float ADD_DrawSpeed { get; set; }
         public float ADD_BoltSpeed { get; set; }
-
     }
-
+    class GunAttachments
+    {
+        public string WeapontName { get; set; }
+        public string AttachmentName { get; set; }
+    }
     class BattleBitRemasteredDataMiningCode
     {
         static void Main(string[] args)
         {
             var ExecutionTime = System.Diagnostics.Stopwatch.StartNew();  //Starts the timer for how long program took
-
-            string Monobehaviour_Location = @"C:\Users\AUTHOR\Desktop\BBR Ripperino\BattleBit\ExportedProject\Assets\MonoBehaviour\"; //...\BattleBit\ExportedProject\Assets\MonoBehaviour\"
-            string PrefabInstance_Location = @"C:\Users\AUTHOR\Desktop\BBR Ripperino\BattleBit\ExportedProject\Assets\PrefabInstance\"; // ...\BattleBit\ExportedProject\Assets\PrefabInstance\"
-            string AnimationClip_Location = @"C:\Users\AUTHOR\Desktop\BBR Ripperino\BattleBit\ExportedProject\Assets\AnimationClip\"; // ...\BattleBit\ExportedProject\Assets\AnimationClip\"
-            string CSV_Location = @"C:\Users\AUTHOR\Desktop\BBR Ripperino\CSV_CREATIONS\"; // ...\LocationOfCSVs
-
+            string Monobehaviour_Location = @"C:\Users\ XX \ XX \ XX \BattleBit\ExportedProject\Assets\MonoBehaviour\"; //...\BattleBit\ExportedProject\Assets\MonoBehaviour\"
+            string PrefabInstance_Location = @"C:\Users\ XX \ XX \ XX \BattleBit\ExportedProject\Assets\PrefabInstance\"; // ...\BattleBit\ExportedProject\Assets\PrefabInstance\"
+            string AnimationClip_Location = @"C:\Users\ XX \ XX \ XX \BattleBit\ExportedProject\Assets\AnimationClip\"; // ...\BattleBit\ExportedProject\Assets\AnimationClip\"
+            string CSV_Location = @"C:\Users\ XX \ XX \ XX \CSV_CREATIONS\"; // ...\LocationOfCSVs
             string Number_Regex = @"[+-]?([0-9]*[.])?[0-9]+";
             string Name_Regex = @"(?<=m_Name:\s).+";
             string MagazineName_Regex = @"(?<=MagName:\s).+";
             string GUID_Regex = @"guid:\s*([a-fA-F0-9]+)";
-
-            //comma version: Name,Type,Level,Damage,Light Damage,Heavy Damage,Vert Recoil,Hor Recoil,First Shot Kick,Velocity,Acc1,Acc2,Acc3,Acc4,Accuracy,Firerate,Sound Spread,Muzzle Flash,Control,Weight,ADS,Running Speed,Reload Speed,Reload,Drop Reload,Empty Reload,Empty Drop Reload,Draw Speed,Bolt Speed,Magazine Size,Key1Time,Key1Value,Key1InSlope,Key1OutSlope,Key1TangentMode,Key1WeightedMode,Key1InWeight,Key1OutWeight,Fall-off START,Key2Value,Key2InSlope,Key2OutSlope,Key2TangentMode,Key2WeightedMode,Key2InWeight,Key2OutWeight,Fall-off END,Min Damage,Key3InSlope,Key3OutSlope,Key3TangentMode,Key3WeightedMode,Key3InWeight,Key3OutWeight
-            string Gun_CSV_HEADER = "Name;Type;Level;Damage;Light Damage;Heavy Damage;Vert Recoil;Hor Recoil;First Shot Kick;Velocity;BaseHipFireAccuracy;LowestHipFireAccuracy;BaseADSFireAccuracy;LowestADSFireAccuracy;Accuracy;Firerate;Sound Spread;Muzzle Flash;Control;Weight;ADS;Running Speed;Reload Speed;Reload;Drop Reload;Empty Reload;Empty Drop Reload;Draw Speed;DrawIN;DrawOUT;Bolt Speed;Magazine Size;Key1Time;Key1Value;Key1InSlope;Key1OutSlope;Key1TangentMode;Key1WeightedMode;Key1InWeight;Key1OutWeight;Fall-off START;Key2Value;Key2InSlope;Key2OutSlope;Key2TangentMode;Key2WeightedMode;Key2InWeight;Key2OutWeight;Fall-off END;Min Damage;Key3InSlope;Key3OutSlope;Key3TangentMode;Key3WeightedMode;Key3InWeight;Key3OutWeight";
-
+            //comma version: "Name,Type,Level,Damage,Light Damage,Heavy Damage,Vert Recoil,Hor Recoil,First Shot Kick,Velocity,BaseHipFireAccuracy,LowestHipFireAccuracy,BaseADSFireAccuracy,LowestADSFireAccuracy,Accuracy,Firerate,Sound Spread,Muzzle Flash,Control,Weight,ADS,Running Speed,Reload Speed,Reload,Drop Reload,Empty Reload,Empty Drop Reload,Draw Speed,DrawIN,DrawOUT,MagCheck,Bolt Speed,Magazine Size,Key1Time,Key1Value,Key1InSlope,Key1OutSlope,Key1TangentMode,Key1WeightedMode,Key1InWeight,Key1OutWeight,Fall-off START,Key2Value,Key2InSlope,Key2OutSlope,Key2TangentMode,Key2WeightedMode,Key2InWeight,Key2OutWeight,Fall-off END,Min Damage,Key3InSlope,Key3OutSlope,Key3TangentMode,Key3WeightedMode,Key3InWeight,Key3OutWeight"
+            string Gun_CSV_HEADER = "Name;Type;Level;Damage;Light Damage;Heavy Damage;Vert Recoil;Hor Recoil;First Shot Kick;Velocity;BaseHipFireAccuracy;LowestHipFireAccuracy;BaseADSFireAccuracy;LowestADSFireAccuracy;Accuracy;Firerate;Sound Spread;Muzzle Flash;Muzzle Chance;Control;Weight;ADS;Running Speed;Reload Speed;Reload;Drop Reload;Empty Reload;Empty Drop Reload;Draw Speed;DrawIN;DrawOUT;MagCheck;Bolt Speed;Magazine Size;Key1Time;Key1Value;Key1InSlope;Key1OutSlope;Key1TangentMode;Key1WeightedMode;Key1InWeight;Key1OutWeight;Fall-off START;Key2Value;Key2InSlope;Key2OutSlope;Key2TangentMode;Key2WeightedMode;Key2InWeight;Key2OutWeight;Fall-off END;Min Damage;Key3InSlope;Key3OutSlope;Key3TangentMode;Key3WeightedMode;Key3InWeight;Key3OutWeight;Key4Time;Key4Value;Key4InSlope;Key4OutSlope;Key4TangentMode;Key4WeightedMode;Key4InWeight;Key4OutWeight;Headshot multiplier";
             //comma version: Attachment,Type,Damage,Light Damage,Heavy Damage,Vert Recoil,Hor Recoil,First Shot Kick,Velocity,Accuracy,Firerate,Sound Spread,Muzzle Flash,Control,ADS,Running Speed,Reload,Draw Speed,Bolt Speed
-            string Attachment_CSV_HEADER = "Attachment;Type;Damage;Light Damage;Heavy Damage;Vert Recoil;Hor Recoil;First Shot Kick;Velocity;Accuracy;Firerate;Sound Spread;Muzzle Flash;Control;ADS;Running Speed;Reload;Draw Speed;Bolt Speed";
-
+            string Attachment_CSV_HEADER = "Attachment;Type;Damage;Light Damage;Heavy Damage;Vert Recoil;Hor Recoil;First Shot Kick;Velocity;Accuracy;Firerate;Sound Spread;Muzzle Flash;Control;ADS;Running Speed;Reload Speed;Draw Speed;Bolt Speed";
             //comma version: Gun,Magazine,Damage,Light Damage,Heavy Damage,Vert Recoil,Hor Recoil,First Shot Kick,Velocity,Accuracy,Firerate,Sound Spread,Muzzle Flash,Control,ADS,Running Speed,Reload,Draw Speed,Bolt Speed,Magazine Size
-            string MagazineCSV_HEADER = "Gun;Magazine;Damage;Light Damage;Heavy Damage;Vert Recoil;Hor Recoil;First Shot Kick;Velocity;Accuracy;Firerate;Sound Spread;Muzzle Flash;Control;ADS;Running Speed;Reload;Draw Speed;Bolt Speed;Magazine Size";
-
+            string MagazineCSV_HEADER = "Gun;Magazine;Damage;Light Damage;Heavy Damage;Vert Recoil;Hor Recoil;First Shot Kick;Velocity;Accuracy;Firerate;Sound Spread;Muzzle Flash;Control;ADS;Running Speed;Reload Speed;Draw Speed;Bolt Speed;Magazine Size";
             List<string> List_WeaponMonoPaths = new List<string>();
             List<string> List_AttachmentMonoPaths = new List<string>();
             List<string> List_WeaponPrefabPaths = new List<string>();
             List<string> List_AttachmentPrefabPaths = new List<string>();
-
+            List<string> List_AttachmentPrefabMetaPaths = new List<string>();
             List<string> List_ReloadMetaAnimationPaths = new List<string>();
             List<string> List_ReloadBoltMetaAnimationPaths = new List<string>();
             List<string> List_ReloadFastMetaAnimationPaths = new List<string>();
@@ -184,7 +188,7 @@ namespace DataminingScript
             List<string> List_BoltMetaAnimationPaths = new List<string>();
             List<string> List_DrawINMetaAnimationPaths = new List<string>();
             List<string> List_DrawOUTMetaAnimationPaths = new List<string>();
-
+            List<string> List_MagCheckMetaAnimationPaths = new List<string>();
             List<string> List_Reload_Times = new List<string>();
             List<string> List_ReloadBolt_Times = new List<string>();
             List<string> List_ReloadFast_Times = new List<string>();
@@ -192,19 +196,19 @@ namespace DataminingScript
             List<string> List_Bolt_Times = new List<string>();
             List<string> List_DrawIN_Times = new List<string>();
             List<string> List_DrawOUT_Times = new List<string>();
-
+            List<string> List_MagCheck_Times=new List<string>();
             List<Gun> Guns = new List<Gun>();
             List<Magazine> Magazines = new List<Magazine>();
             List<Attachment> Attachments = new List<Attachment>();
-
+            List<string> AllowedAttachments1 = new List<string>();
+            List<string> AttachmentNames = new List<string>();
+            List<string> AttachmentTypes = new List<string>();
             //Order of methods should always be
             //1.PathSorting (All paths used in upcoming codes)
             //2.Animation (Weapon reload and bolt times)
             //3.The Rest
             //This is due to reload times being acquired from .anim files and the reload speed multiplier is applied to the time acquired from .Anim files
-
             var time = Stopwatch.StartNew();
-
             //Creates bunch of lists that contain file paths that are used in other methods.
             SortMonoPathsAndPrefabAndAnimationPaths(
                 //Input
@@ -222,11 +226,11 @@ namespace DataminingScript
                 List_ReloadFastBoltMetaAnimationPaths,
                 List_BoltMetaAnimationPaths,
                 List_DrawINMetaAnimationPaths,
-                List_DrawOUTMetaAnimationPaths);
-
-            Console.WriteLine("Sort took: " + (time.ElapsedMilliseconds / 1000f));
+                List_DrawOUTMetaAnimationPaths,
+                List_MagCheckMetaAnimationPaths,
+                List_AttachmentPrefabMetaPaths);
+            //Console.WriteLine("Sort took: " + (time.ElapsedMilliseconds / 1000f));
             time.Restart();
-
             //Makes all the accurate animation related times
             Animations(
                 //Input
@@ -243,6 +247,7 @@ namespace DataminingScript
                 List_BoltMetaAnimationPaths,
                 List_DrawINMetaAnimationPaths,
                 List_DrawOUTMetaAnimationPaths,
+                List_MagCheckMetaAnimationPaths,
                 //Output
                 List_Reload_Times,
                 List_ReloadBolt_Times,
@@ -250,12 +255,11 @@ namespace DataminingScript
                 List_ReloadFastBolt_Times,
                 List_Bolt_Times,
                 List_DrawIN_Times,
-                List_DrawOUT_Times
+                List_DrawOUT_Times,
+                List_MagCheck_Times
                 );
-
-            Console.WriteLine("Animations took: " + (time.ElapsedMilliseconds / 1000f));
+            //Console.WriteLine("Animations took: " + (time.ElapsedMilliseconds / 1000f));
             time.Restart();
-
             WeaponAndMagazineValues(
                 //Input
                 List_WeaponMonoPaths,
@@ -269,13 +273,12 @@ namespace DataminingScript
                 List_Bolt_Times,
                 List_DrawIN_Times,
                 List_DrawOUT_Times,
+                List_MagCheck_Times,
                 //Output
                 Guns,
                 Magazines);
-
-            Console.WriteLine("WeaponAndMagazine values took: " + (time.ElapsedMilliseconds / 1000f));
+            //Console.WriteLine("WeaponAndMagazine values took: " + (time.ElapsedMilliseconds / 1000f));
             time.Restart();
-
             AttachmentValues(
                 //Input
                 List_AttachmentMonoPaths,
@@ -284,10 +287,17 @@ namespace DataminingScript
                 //Output
                 Attachments
                 );
-
-            Console.WriteLine("Attachment values took: " + (time.ElapsedMilliseconds / 1000f));
+            AllowedAttachments(
+                List_WeaponMonoPaths,
+                List_AttachmentMonoPaths,
+                Monobehaviour_Location,
+                AllowedAttachments1,
+                Attachments,
+                AttachmentNames,
+                AttachmentTypes
+                );
+            //Console.WriteLine("Attachment values took: " + (time.ElapsedMilliseconds / 1000f));
             time.Restart();
-
             WriteCSV(
                 CSV_Location,
                 Gun_CSV_HEADER,
@@ -297,51 +307,40 @@ namespace DataminingScript
                 Attachments,
                 Magazines
                 );
-
-            Console.WriteLine("WriteCSV took: " + (time.ElapsedMilliseconds / 1000f));
+            //Console.WriteLine("WriteCSV took: " + (time.ElapsedMilliseconds / 1000f));
             time.Stop();
-
             ExecutionTime.Stop();
-            Console.WriteLine("Datamining program took " + ExecutionTime.ElapsedMilliseconds / 1000f + " seconds to fully complete");
+            //Console.WriteLine("Datamining program took " + ExecutionTime.ElapsedMilliseconds / 1000f + " seconds to fully complete");
         }
-
         //Prepares Mono, Prefab and Animation paths for other methods to use
-        static void SortMonoPathsAndPrefabAndAnimationPaths(string Monobehaviour_Location, string PrefabInstance_Location, string AnimationClip_Location, List<string> List_WeaponMonoPaths, List<string> List_AttachmentMonoPaths, List<string> List_WeaponPrefabPaths, List<string> List_AttachmentPrefabPaths, List<string> List_ReloadMetaAnimationPaths, List<string> List_ReloadBoltMetaAnimationPaths, List<string> List_ReloadFastMetaAnimationPaths, List<string> List_ReloadFastBoltMetaAnimationPaths, List<string> List_BoltMetaAnimationPaths, List<string> List_DrawINMetaAnimationPaths, List<string> List_DrawOUTMetaAnimationPaths)
+        static void SortMonoPathsAndPrefabAndAnimationPaths(string Monobehaviour_Location, string PrefabInstance_Location, string AnimationClip_Location, List<string> List_WeaponMonoPaths, List<string> List_AttachmentMonoPaths, List<string> List_WeaponPrefabPaths, List<string> List_AttachmentPrefabPaths, List<string> List_ReloadMetaAnimationPaths, List<string> List_ReloadBoltMetaAnimationPaths, List<string> List_ReloadFastMetaAnimationPaths, List<string> List_ReloadFastBoltMetaAnimationPaths, List<string> List_BoltMetaAnimationPaths, List<string> List_DrawINMetaAnimationPaths, List<string> List_DrawOUTMetaAnimationPaths, List<string> List_MagCheckMetaAnimationPaths, List<string>List_AttachmentPrefabMetaPaths)
         {
             string[] MonobehaviourPaths = Directory.GetFiles(Monobehaviour_Location); //Gets all paths in  ...\BattleBit\ExportedProject\Assets\MonoBehaviour
             string[] PrefabInstancePaths = Directory.GetFiles(PrefabInstance_Location); //Gets all paths in  ...\BattleBit\ExportedProject\Assets\PrefabInstances
             string[] AnimationClipPaths = Directory.GetFiles(AnimationClip_Location); //Gets all paths in  ...\BattleBit\ExportedProject\Assets\AnimationClip
-
-            foreach (string Monobehaviour_Path in MonobehaviourPaths) //Goes through each path individually
+            foreach (string Monobehaviour_Path in MonobehaviourPaths) //Filters weapon and attachment mono paths into lists
             {
                 if (!Monobehaviour_Path.Contains(".meta")) //Excludes all .meta files as they have no relevant information
                 {
-
                     foreach (string line in File.ReadLines(Monobehaviour_Path))//Reads each line of the file one by one
                     {
-
                         if (line.Contains("WeaponType:") && !Monobehaviour_Path.Contains("0_EmptyGun.asset")) //Weapon files always have the text "WeaponType:" in them, also excluding path manually as it's irrelevant
                         {
                             List_WeaponMonoPaths.Add(Monobehaviour_Path);
                             break;
-
                         }
-
                         if (line.Contains("  Pistol_Kills:")) //Attachment files always have the text "Pistol_Kills" in them
                         {
                             List_AttachmentMonoPaths.Add(Monobehaviour_Path);
                             break;
                         }
                     }
-
                 }
-            }
-
-            foreach (string Prefab_Path in PrefabInstancePaths)
+            } 
+            foreach (string Prefab_Path in PrefabInstancePaths) //Weapon Prefabs
             {
                 int i = 0;
                 int j = 0;
-
                 if (!Prefab_Path.Contains("FirstPersonController.prefab") && !Prefab_Path.Contains("EmptyGun.prefab") && !Prefab_Path.Contains("ThirdPersonController.prefab") && !Prefab_Path.Contains(".meta") && !Prefab_Path.Contains("USA") && !Prefab_Path.Contains("USV2") && !Prefab_Path.Contains("RU") && !Prefab_Path.Contains("RUV2")) //Excluding paths manually to read useless files
                 {
                     //Console.WriteLine(Prefab_Path);
@@ -351,23 +350,21 @@ namespace DataminingScript
                         {
                             i++;
                         }
-
                         if (i > 9)
                         {
                             List_WeaponPrefabPaths.Add(Prefab_Path);
                             break;
                         }
                     }
-
                     foreach (string line in File.ReadLines(Prefab_Path))
                     {
                         j++;
-
                         if (j == 15)
                         {
                             if (line.Contains("m_Layer: 8")) //15th line of an attachment prefab file always contains "m_Layer: 8"
                             {
                                 List_AttachmentPrefabPaths.Add(Prefab_Path);
+                                List_AttachmentPrefabMetaPaths.Add(Prefab_Path +".meta");
                                 break;
                             }
                             else
@@ -378,7 +375,6 @@ namespace DataminingScript
                     }
                 }
             }
-
             foreach (string AnimationPath in AnimationClipPaths) //If path contains "X", then it is saved to a list
             {
                 if (AnimationPath.Contains("Reload_") || AnimationPath.Contains("Reload.anim.meta"))
@@ -387,7 +383,6 @@ namespace DataminingScript
                     {
                         List_ReloadMetaAnimationPaths.Add(AnimationPath);
                     }
-
                 }
                 if (AnimationPath.Contains("ReloadBolt_") || AnimationPath.Contains("ReloadBolt.anim.meta"))
                 {
@@ -416,7 +411,6 @@ namespace DataminingScript
                     {
                         List_BoltMetaAnimationPaths.Add(AnimationPath);
                     }
-
                 }
                 if (AnimationPath.Contains("DrawIn_") || AnimationPath.Contains("DrawIn.anim.meta"))
                 {
@@ -424,7 +418,6 @@ namespace DataminingScript
                     {
                         List_DrawINMetaAnimationPaths.Add(AnimationPath);
                     }
-
                 }
                 if (AnimationPath.Contains("DrawOut_") || AnimationPath.Contains("DrawOut.anim.meta"))
                 {
@@ -432,39 +425,36 @@ namespace DataminingScript
                     {
                         List_DrawOUTMetaAnimationPaths.Add(AnimationPath);
                     }
-
                 }
-
+                if (AnimationPath.Contains("MagCheck_") || AnimationPath.Contains("MagCheck.anim.meta"))
+                {
+                    if (AnimationPath.Contains(".meta"))
+                    {
+                        List_MagCheckMetaAnimationPaths.Add(AnimationPath);
+                    }
+                }
             }
         }
-
         //Handles all Animation related values, which can then be used in Weapons()
-        static void Animations(string Number_Regex, string GUID_Regex, string AnimationClip_Location, string PrefabInstance_Location, List<string> List_WeaponPrefabPaths, List<string> List_ReloadMetaAnimationPaths, List<string> List_ReloadBoltMetaAnimationPaths, List<string> List_ReloadFastMetaAnimationPaths, List<string> List_ReloadFastBoltMetaAnimationPaths, List<string> List_BoltMetaAnimationPaths, List<string> List_DrawINMetaAnimationPaths, List<string> List_DrawOUTMetaAnimationPaths, List<string> List_Reload_Times, List<string> List_ReloadBolt_Times, List<string> List_ReloadFast_Times, List<string> List_ReloadFastBolt_Times, List<string> List_Bolt_Times, List<string> List_DrawIN_Times, List<string> List_DrawOUT_Times)
+        static void Animations(string Number_Regex, string GUID_Regex, string AnimationClip_Location, string PrefabInstance_Location, List<string> List_WeaponPrefabPaths, List<string> List_ReloadMetaAnimationPaths, List<string> List_ReloadBoltMetaAnimationPaths, List<string> List_ReloadFastMetaAnimationPaths, List<string> List_ReloadFastBoltMetaAnimationPaths, List<string> List_BoltMetaAnimationPaths, List<string> List_DrawINMetaAnimationPaths, List<string> List_DrawOUTMetaAnimationPaths, List<string> List_MagCheckMetaAnimationPaths, List<string> List_Reload_Times, List<string> List_ReloadBolt_Times, List<string> List_ReloadFast_Times, List<string> List_ReloadFastBolt_Times, List<string> List_Bolt_Times, List<string> List_DrawIN_Times, List<string> List_DrawOUT_Times, List<string> List_MagCheck_Times)
         {
             //_Path Is in line with _GUID making them "Parallel" _Path[i] = _GUID[i] (IMPORTANT TO UNDERSTANDING ANIMATION VALUE ACQUIREMENT)
-
             List<string> List_Reload_PATH = new List<string>();
             List<string> List_Reload_GUID = new List<string>();
-
             List<string> List_ReloadFast_PATH = new List<string>();
             List<string> List_ReloadFast_GUID = new List<string>();
-
             List<string> List_ReloadBolt_PATH = new List<string>();
             List<string> List_ReloadBolt_GUID = new List<string>();
-
             List<string> List_ReloadFastBolt_PATH = new List<string>();
             List<string> List_ReloadFastBolt_GUID = new List<string>();
-
             List<string> List_Bolt_PATH = new List<string>();
             List<string> List_Bolt_GUID = new List<string>();
-
             List<string> List_DrawIN_PATH = new List<string>();
             List<string> List_DrawIN_GUID = new List<string>();
-
             List<string> List_DrawOUT_PATH = new List<string>();
             List<string> List_DrawOUT_GUID = new List<string>();
-
-
+            List<string> List_MagCheck_PATH = new List<string>();
+            List<string> List_MagCheck_GUID = new List<string>();
             //Reload Meta PATH and GUID
             foreach (string Path in List_ReloadMetaAnimationPaths)
             {
@@ -518,7 +508,6 @@ namespace DataminingScript
                     }
                 }
             }
-
             //Bolt Meta PATH and GUID
             foreach (string Path in List_BoltMetaAnimationPaths)
             {
@@ -533,7 +522,6 @@ namespace DataminingScript
                     }
                 }
             }
-
             foreach (string Path in List_DrawINMetaAnimationPaths)
             {
                 foreach (string line in File.ReadLines(Path))
@@ -547,7 +535,6 @@ namespace DataminingScript
                     }
                 }
             }
-
             foreach (string Path in List_DrawOUTMetaAnimationPaths)
             {
                 foreach (string line in File.ReadLines(Path))
@@ -561,12 +548,23 @@ namespace DataminingScript
                     }
                 }
             }
-
+            foreach (string Path in List_MagCheckMetaAnimationPaths)
+            {
+                foreach (string line in File.ReadLines(Path))
+                {
+                    if (line.StartsWith("guid: "))
+                    {
+                        //Here it's putting GUIDs and PATHs "Parallel"
+                        List_MagCheck_PATH.Add(Path.Replace(".meta", ""));
+                        List_MagCheck_GUID.Add(line.Substring(6));
+                        break;
+                    }
+                }
+            }
             //ReloadAnimationTimes
             //To understand how this works, you have to understand how X_GUID and PATH lists are made
-            //When those lists are being created, they input both GUID string and the PATH string at the same time into separate lits
+            //When those lists are being created, they input both GUID string and the PATH string at the same time into separate lists
             //So they are paralel, Example: GUID[1] (GUID string) = PATH[1] (PATH where GUID string is found) 
-
             //How this line works is by first finding a GUID string in a weapon prefab file,
             //Then it takes the index number of the GUID which it found and uses that index to determine which path it should read to find reload times.
             foreach (string Path in List_WeaponPrefabPaths) //All Weapon prefabs
@@ -578,7 +576,6 @@ namespace DataminingScript
                     float register;
                     foreach (string GUID in List_Reload_GUID) //Reads list of GUID's one by one
                     {
-
                         if (PrefabLine.Contains(GUID)) //If string GUID is found in a weapon prefab file.
                         {
                             foreach (string AnimLine in File.ReadAllLines(List_Reload_PATH[List_Reload_GUID.IndexOf(GUID)]))//Reads the reload file, which is located in the same line in a list as the GUID which was found. Cuz they are paralel
@@ -675,11 +672,9 @@ namespace DataminingScript
                             List_ReloadBolt_Times.Add(Path.ToUpper().Substring(PrefabInstance_Location.Length).Replace(".PREFAB", "").Replace("OS14_", "").Replace("VITYAZ", "").Replace("-", "").Replace("REMINGTON700", "REM700").Replace("ULTIMAX", "ULTIMAX100").Replace("MK14", "MKEBR") + ":" + highest);
                             break;
                         }
-
                     }
                 }
             }
-
             foreach (string Path in List_WeaponPrefabPaths)
             {
                 foreach (string PrefabLine in File.ReadLines(Path))
@@ -735,7 +730,6 @@ namespace DataminingScript
                                     if (register > highest)
                                     {
                                         highest = register;
-
                                     }
                                 }
                             }
@@ -784,7 +778,6 @@ namespace DataminingScript
                     }
                 }
             }
-
             foreach (string Path in List_WeaponPrefabPaths)
             {
                 foreach (string PrefabLine in File.ReadLines(Path))
@@ -792,7 +785,6 @@ namespace DataminingScript
                     int Index = 0;
                     float highest = 0;
                     float register;
-
                     foreach (string GUID in List_DrawOUT_GUID)
                     {
                         if (PrefabLine.Contains(GUID))
@@ -822,21 +814,55 @@ namespace DataminingScript
                     }
                 }
             }
-
+            foreach (string Path in List_WeaponPrefabPaths)
+            {
+                foreach (string PrefabLine in File.ReadLines(Path))
+                {
+                    int Index = 0;
+                    float highest = 0;
+                    float register;
+                    foreach (string GUID in List_MagCheck_GUID)
+                    {
+                        if (PrefabLine.Contains(GUID))
+                        {
+                            foreach (string AnimLine in File.ReadLines(List_MagCheck_PATH[List_MagCheck_GUID.IndexOf(GUID)]))
+                            {
+                                if (AnimLine.Contains("time") && !AnimLine.Contains("E"))
+                                {
+                                    register = float.Parse(Regex.Match(AnimLine, Number_Regex).Value);
+                                    if (register > highest)
+                                    {
+                                        highest = register;
+                                        Index++;
+                                    }
+                                    if (Index > 50)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (highest != 0)
+                        {
+                            List_MagCheck_Times.Add(Path.ToUpper().Substring(PrefabInstance_Location.Length).Replace(".PREFAB", "").Replace("OS14_", "").Replace("VITYAZ", "").Replace("-", "").Replace("REMINGTON700", "REM700").Replace("ULTIMAX", "ULTIMAX100").Replace("MK14", "MKEBR") + ":" + highest);
+                            break;
+                        }
+                    }
+                }
+            }
         }
-
-
-        static void WeaponAndMagazineValues(List<string> List_WeaponMonoPaths, string Name_Regex, string Number_Regex, string MagazineName_Regex, List<string> List_Reload_Times, List<string> List_ReloadBolt_Times, List<string> List_ReloadFast_Times, List<string> List_ReloadFastBolt_Times, List<string> List_Bolt_Times, List<string> List_DrawIN_Times, List<string> List_DrawOUT_Times, List<Gun> Guns, List<Magazine> Magazines)
+        static void WeaponAndMagazineValues(List<string> List_WeaponMonoPaths, string Name_Regex, string Number_Regex, string MagazineName_Regex, List<string> List_Reload_Times, List<string> List_ReloadBolt_Times, List<string> List_ReloadFast_Times, List<string> List_ReloadFastBolt_Times, List<string> List_Bolt_Times, List<string> List_DrawIN_Times, List<string> List_DrawOUT_Times, List<string> List_MagCheck_Times, List<Gun> Guns, List<Magazine> Magazines)
         {
             foreach (string MonoPath in List_WeaponMonoPaths) //Goes through list of weapon monobehaviour paths one by one
             {
                 bool rank = false;
                 bool DropOfFound = false;
                 bool MagFound = false;
-
+                bool fourthfound = false;
+              
                 int KeyFrameCount = 0;
                 int MagCount = 0;
-
+               
                 Gun newGun = new Gun();
                 Magazine newMag = new Magazine();
 
@@ -846,162 +872,152 @@ namespace DataminingScript
                     {
                         newGun.WeaponName = (Regex.Match(Regex.Replace(line, @"\d+_", ""), Name_Regex).Value).ToUpper().Replace("_", "").Replace("-", "");
                     }
-
                     if (line.Contains("WeaponType:"))
                     {
                         int type = int.Parse(line.Substring(14));
                         switch (type)
                         {
                             case 0:
-                                newGun.WeaponType = "AR"; break;
+                                newGun.WeaponType = "AR"; 
+                                newGun.Headshot_Multiplier = 1.5f; break;
                             case 1:
-                                newGun.WeaponType = "DMR"; break;
+                                newGun.WeaponType = "DMR";
+                                newGun.Headshot_Multiplier = 1.5f; break;
                             case 2:
-                                newGun.WeaponType = "SNIPER"; break;
+                                newGun.WeaponType = "SNIPER";
+                                newGun.Headshot_Multiplier = 1.9f; break;
                             case 3:
-                                newGun.WeaponType = "LSG"; break;
+                                newGun.WeaponType = "LSG";
+                                newGun.Headshot_Multiplier = 1.5f; break;
                             case 4:
-                                newGun.WeaponType = "LMG"; break;
+                                newGun.WeaponType = "LMG";
+                                newGun.Headshot_Multiplier = 1.5f; break;
                             case 5:
-                                newGun.WeaponType = "SMG"; break;
+                                newGun.WeaponType = "SMG";
+                                newGun.Headshot_Multiplier = 1.2f; break;
                             case 6:
-                                newGun.WeaponType = "PISTOL"; break;
+                                newGun.WeaponType = "PISTOL";
+                                newGun.Headshot_Multiplier = 1.2f; break;
                             case 7:
-                                newGun.WeaponType = "AUTOMATIC PISTOL"; break;
+                                newGun.WeaponType = "AUTOMATIC PISTOL";
+                                newGun.Headshot_Multiplier = 1.2f; break;
                             case 8:
-                                newGun.WeaponType = "HEAVY PISTOL"; break;
+                                newGun.WeaponType = "HEAVY PISTOL";
+                                newGun.Headshot_Multiplier = 1.5f; break;
                             case 9:
-                                newGun.WeaponType = "CARBINE"; break;
+                                newGun.WeaponType = "CARBINE";
+                                newGun.Headshot_Multiplier = 1.5f; break;
                             case 10:
-                                newGun.WeaponType = "PDW"; break;
+                                newGun.WeaponType = "PDW";
+                                newGun.Headshot_Multiplier = 1.5f; break;
                             case 11:
-                                newGun.WeaponType = "BR"; break;
+                                newGun.WeaponType = "BR";
+                                newGun.Headshot_Multiplier = 1.5f; break;
                         }
                     }
-
                     if (line.Contains("RequiredRank:") && !rank)
                     {
                         newGun.Level = float.Parse(line.Substring(17));
                         rank = true;
                     }
-
                     if (line.Contains("DamageOnInfantryBody:"))
                     {
                         newGun.InfantryDamage = float.Parse(line.Substring(25));
                     }
-
                     if (line.Contains("DamageOnLightArmoredVehicles:"))
                     {
                         newGun.LightDamage = float.Parse(line.Substring(33));
                     }
-
                     if (line.Contains("DamageOnHeavyHeavyVehicles: "))
                     {
                         newGun.HeavyDamage = float.Parse(line.Substring(31));
                     }
-
                     if (line.Contains("VerticalMouse:"))
                     {
                         newGun.VerticalRecoil = float.Parse(line.Substring(20));
                     }
-
                     if (line.Contains("HorizontalMouse:"))
                     {
                         newGun.HorizontalRecoil = float.Parse(line.Substring(22));
                     }
-
                     if (line.Contains("FirstShotRecoil: "))
                     {
                         newGun.FirstShotKick = float.Parse(line.Substring(22));
                     }
-
                     if (line.Contains("BulletVelocity:"))
                     {
                         newGun.Velocity = float.Parse(line.Substring(19));
                     }
-
                     if (line.Contains("BaseHipFireAccuracy:"))
                     {
                         newGun.Acc1 = float.Parse(line.Substring(26));
                     }
-
                     if (line.Contains("LowestHipFireAccuracy:"))
                     {
                         newGun.Acc2 = float.Parse(line.Substring(28));
                     }
-
                     if (line.Contains("BaseADSFireAccuracy:"))
                     {
                         newGun.Acc3 = float.Parse(line.Substring(26));
                     }
-
                     if (line.Contains("LowestADSFireAccuracy:"))
                     {
                         newGun.Acc4 = float.Parse(line.Substring(28));
                         newGun.Accuracy = (newGun.Acc1 + newGun.Acc2 + newGun.Acc3 + newGun.Acc4) / 4f;
                     }
-
                     if (line.Contains("RoundsPerMinute:"))
                     {
                         newGun.Firerate = float.Parse(line.Substring(20));
                     }
-
                     if (line.Contains("ShotSoundDistance: "))
                     {
                         newGun.SoundSpread = float.Parse(line.Substring(22));
                     }
-
                     if (line.Contains("MuzzleScale: "))
                     {
                         newGun.MuzzleFlash = float.Parse(line.Substring(16));
                     }
-
+                    if (line.Contains("MuzzleChance: "))
+                    {
+                        newGun.MuzzleChance = float.Parse(line.Substring(17));
+                    }
                     if (line.Contains("Weigth: "))
                     {
                         newGun.Weight = float.Parse(line.Substring(11));
                         newGun.Control = (-2f / 7f) * newGun.Weight + 8f / 7f;
                     }
-
                     if (line.Contains("AdsTime: "))
                     {
                         newGun.AimDownTime = float.Parse(line.Substring(12));
                     }
-
                     if (line.Contains("PlayerRunningSpeed: "))
                     {
                         newGun.RunningSpeed = float.Parse(line.Substring(23));
                     }
-
                     if (line.Contains("ReloadSpeed: "))
                     {
                         newGun.ReloadSpeed = float.Parse(line.Substring(16));
                     }
-
                     if (line.Contains("DrawSpeed: "))
                     {
                         newGun.DrawSpeed = float.Parse(line.Substring(14));
                     }
-
                     if (line.Contains("BoltActionSpeed: "))
                     {
                         newGun.BoltSpeed = float.Parse(line.Substring(20));
                     }
-
                     if (line.Contains("DefaultRoundsPerMagazine:"))
                     {
                         newGun.DefaultMagazineSize = float.Parse(line.Substring(27));
                     }
-
                     if (line.Contains("DropOf:"))
                     {
                         DropOfFound = true;
                     }
-
                     if (DropOfFound)
                     {
                         KeyFrameCount++;
                     }
-
                     switch (KeyFrameCount)
                     {
                         //Buncha animation curve keyframe values
@@ -1013,7 +1029,6 @@ namespace DataminingScript
                         case 10: newGun.Key1WeightedMode = float.Parse(line.Substring(21)); break;
                         case 11: newGun.Key1InWeight = float.Parse(line.Substring(17)); break;
                         case 12: newGun.Key1OutWeight = float.Parse(line.Substring(18)); break;
-
                         case 14: newGun.Key2Time = float.Parse(line.Substring(13)); break;
                         case 15: newGun.Key2Value = float.Parse(line.Substring(14)); break;
                         case 16: newGun.Key2InSlope = float.Parse(line.Substring(16)); break;
@@ -1022,7 +1037,6 @@ namespace DataminingScript
                         case 19: newGun.Key2WeightedMode = float.Parse(line.Substring(21)); break;
                         case 20: newGun.Key2InWeight = float.Parse(line.Substring(17)); break;
                         case 21: newGun.Key2OutWeight = float.Parse(line.Substring(18)); break;
-
                         case 23: newGun.Key3Time = float.Parse(line.Substring(13)); break;
                         case 24: newGun.Key3Value = float.Parse(line.Substring(14)); break;
                         case 25: newGun.Key3InSlope = float.Parse(line.Substring(16)); break;
@@ -1031,21 +1045,49 @@ namespace DataminingScript
                         case 28: newGun.Key3WeightedMode = float.Parse(line.Substring(21)); break;
                         case 29: newGun.Key3InWeight = float.Parse(line.Substring(17)); break;
                         case 30: newGun.Key3OutWeight = float.Parse(line.Substring(18)); break;
+                        case 31: if(line.Contains("      - serializedVersion: 3"))
+                            {
+                                fourthfound = true;
+                            } break;
+                    }
+                    if(fourthfound)
+                    {
+                        switch(KeyFrameCount)
+                        {
+                            case 32: newGun.Key4Time = float.Parse(line.Substring(13)); break;
+                            case 33: newGun.Key4Value = float.Parse(line.Substring(14)); break;
+                            case 34: newGun.Key4InSlope = float.Parse(line.Substring(16)); break;
+                            case 35: newGun.Key4OutSlope = float.Parse(line.Substring(17)); break;
+                            case 36: newGun.Key4TangentMode = float.Parse(line.Substring(20)); break;
+                            case 37: newGun.Key4WeightedMode = float.Parse(line.Substring(21)); break;
+                            case 38: newGun.Key4InWeight = float.Parse(line.Substring(17)); break;
+                            case 39: newGun.Key4OutWeight = float.Parse(line.Substring(18)); break;
+                        }
+                    }
+                    else
+                    {
+                        newGun.Key4Time = 404;
+                        newGun.Key4Value = 404;
+                        newGun.Key4InSlope = 404;
+                        newGun.Key4OutSlope = 404;
+                        newGun.Key4TangentMode = 404;
+                        newGun.Key4WeightedMode = 404;
+                        newGun.Key4InWeight = 404;
+                        newGun.Key4OutWeight = 404;
+
                     }
 
                     if (line.Contains("  - ID:"))//"  - ID:" is always found at the end of the asset file, if line contains it then that weapon has a magazine option 
                     {
                         MagFound = true;
+                        newMag = new Magazine();
                     }
-
                     if (MagFound)//MagCount will gain +1 per every line read when MagFound = True
                     {
                         MagCount++;
                     }
-
                     switch (MagCount)
                     {
-
                         case 2:
                             newMag.WeaponName = newGun.WeaponName;
                             newMag.Name = line.Substring(12);
@@ -1157,10 +1199,11 @@ namespace DataminingScript
                             Magazines.Add(newMag); //Adds new magazine to the list "Magazines"
                             MagCount = 0;
                             MagFound = false;
+                            //Console.WriteLine("A. "+newMag.WeaponName);
+                            //Console.WriteLine("A. " + newMag.Name);                     
                             break;
                     }
                 }
-
                 foreach (string time in List_Reload_Times)
                 {
                     if (time.Contains(newGun.WeaponName)) //string time format: NAME:X.XXXX
@@ -1170,7 +1213,6 @@ namespace DataminingScript
                         newGun.Reload_time = Reload_time / newGun.ReloadSpeed;
                     }
                 }
-
                 foreach (string time in List_ReloadFast_Times) //string time format: NAME:X.XXXX
                 {
                     if (time.Contains(newGun.WeaponName))
@@ -1180,7 +1222,6 @@ namespace DataminingScript
                         newGun.ReloadFast_time = Reload_time / newGun.ReloadSpeed;
                     }
                 }
-
                 foreach (string time in List_ReloadBolt_Times) //string time format: NAME:X.XXXX
                 {
                     if (time.Contains(newGun.WeaponName))
@@ -1190,7 +1231,6 @@ namespace DataminingScript
                         newGun.ReloadBolt_time = Reload_time / newGun.ReloadSpeed;
                     }
                 }
-
                 foreach (string time in List_ReloadFastBolt_Times) //string time format: NAME:X.XXXX
                 {
                     if (time.Contains(newGun.WeaponName))
@@ -1200,7 +1240,6 @@ namespace DataminingScript
                         newGun.ReloadFastBolt_time = Reload_time / newGun.ReloadSpeed;
                     }
                 }
-
                 foreach (string time in List_Bolt_Times) //string time format: NAME:X.XXXX
                 {
                     if (time.Contains(newGun.WeaponName))
@@ -1208,9 +1247,10 @@ namespace DataminingScript
                         string pattern3 = @":\s*([0-9]+(?:\.[0-9]+)?)";
                         float Bolt_time = float.Parse((Regex.Match(time, pattern3).Groups[1]).Value);
                         newGun.Firerate = 60f / (Bolt_time / newGun.BoltSpeed); //Turns bolt time into a firerate, Firerate = 60s/Bolt time (Rounds per minute)
+                        //Console.WriteLine(newGun.WeaponName);
+                        //Console.WriteLine(Bolt_time / newGun.BoltSpeed);
                     }
                 }
-
                 foreach (string time in List_DrawIN_Times)
                 {
                     if (time.Contains(newGun.WeaponName))
@@ -1220,7 +1260,6 @@ namespace DataminingScript
                         newGun.DrawIN_time = DrawIN_time / newGun.DrawSpeed;
                     }
                 }
-
                 foreach (string time in List_DrawOUT_Times)
                 {
                     if (time.Contains(newGun.WeaponName))
@@ -1230,11 +1269,18 @@ namespace DataminingScript
                         newGun.DrawOUT_time = DrawOUT_time / newGun.DrawSpeed;
                     }
                 }
-
+                foreach (string time in List_MagCheck_Times)
+                {
+                    if (time.Contains(newGun.WeaponName))
+                    {
+                        string pattern3 = @":\s*([0-9]+(?:\.[0-9]+)?)";
+                        float MagCheck_time = float.Parse((Regex.Match(time, pattern3).Groups[1]).Value);
+                        newGun.MagCheck_time = MagCheck_time;
+                    }
+                }
                 Guns.Add(newGun);
             }
         }
-
         static void AttachmentValues(List<string> List_AttachmentMonoPaths, string Name_Regex, string Number_Regex, List<Attachment> Attachments)
         {
             foreach (string Attachment_Path in List_AttachmentMonoPaths)
@@ -1242,157 +1288,121 @@ namespace DataminingScript
                 bool foundSettingString = false;
                 int AttachmentCount = 0;
                 Attachment newAtt = new Attachment();
-
                 foreach (string line in File.ReadAllLines(Attachment_Path))
                 {
-
                     if (line.Contains("m_Name:"))
                     {
                         newAtt.AttachmentName = (Regex.Match(Regex.Replace(input: line, @"\d+_", ""), @"(?<=m_Name:\s).+").Value).Replace("_", " ");
                     }
-
                     if (line.Contains("Settings:"))
                     {
                         foundSettingString = true;
                     }
-
                     if (foundSettingString)
                     {
                         AttachmentCount++;
                     }
-
                     switch (AttachmentCount)
                     {
                         case 3:
                             newAtt.ADD_ReloadSpeed = float.Parse(line.Substring(15));
                             break;
-
                         case 4:
                             newAtt.ReloadSpeed = float.Parse(line.Substring(17));
                             break;
                         case 6:
                             newAtt.ADD_DrawSpeed = float.Parse(line.Substring(15));
                             break;
-
                         case 7:
                             newAtt.DrawSpeed = float.Parse(line.Substring(17));
                             break;
                         case 9:
                             newAtt.ADD_AimDownTime = float.Parse(line.Substring(15));
                             break;
-
                         case 10:
                             newAtt.AimDownTime = float.Parse(line.Substring(17));
                             break;
-
                         case 12:
                             newAtt.ADD_Weight = float.Parse(line.Substring(15));
                             break;
-
                         case 13:
                             newAtt.Weight = float.Parse(line.Substring(17));
                             break;
-
                         case 15:
                             newAtt.ADD_RunningSpeed = float.Parse(line.Substring(15));
                             break;
-
                         case 16:
                             newAtt.RunningSpeed = float.Parse(line.Substring(17));
                             break;
-
                         case 18:
                             newAtt.ADD_VerticalRecoil = float.Parse(line.Substring(15));
                             break;
-
                         case 19:
                             newAtt.VerticalRecoil = float.Parse(line.Substring(17));
                             break;
-
                         case 21:
                             newAtt.ADD_HorizontalRecoil = float.Parse(line.Substring(15));
                             break;
-
                         case 22:
                             newAtt.HorizontalRecoil = float.Parse(line.Substring(17));
                             break;
-
                         case 24:
                             newAtt.ADD_FirstShotKick = float.Parse(line.Substring(15));
                             break;
-
                         case 25:
                             newAtt.FirstShotKick = float.Parse(line.Substring(17));
                             break;
-
                         case 27:
                             newAtt.ADD_Firerate = float.Parse(line.Substring(15));
                             break;
-
                         case 28:
                             newAtt.Firerate = float.Parse(line.Substring(17));
                             break;
-
                         case 30:
                             newAtt.ADD_SoundSpread = float.Parse(line.Substring(15));
                             break;
-
                         case 31:
                             newAtt.SoundSpread = float.Parse(line.Substring(17));
                             break;
-
                         case 33:
                             newAtt.ADD_MuzzleFlash = float.Parse(line.Substring(15));
                             break;
-
                         case 34:
                             newAtt.MuzzleFlash = float.Parse(line.Substring(17));
                             break;
-
                         case 37:
                             newAtt.ADD_Velocity = float.Parse(line.Substring(15));
                             break;
-
                         case 38:
                             newAtt.Velocity = float.Parse(line.Substring(17));
                             break;
-
                         case 43:
                             newAtt.ADD_Accuracy = float.Parse(line.Substring(15));
                             break;
-
                         case 44:
                             newAtt.Accuracy = float.Parse(line.Substring(17));
                             break;
-
                         case 49:
                             newAtt.ADD_InfantryDamage = float.Parse(line.Substring(15));
                             break;
-
                         case 50:
                             newAtt.InfantryDamage = float.Parse(line.Substring(17));
                             break;
-
                         case 52:
                             newAtt.ADD_LightDamage = float.Parse(line.Substring(15));
                             break;
-
                         case 53:
                             newAtt.LightDamage = float.Parse(line.Substring(17));
                             break;
-
                         case 55:
                             newAtt.ADD_HeavyDamage = float.Parse(line.Substring(15));
                             break;
-
                         case 56:
                             newAtt.HeavyDamage = float.Parse(line.Substring(17));
                             break;
-
                         case 58:
                             newAtt.ADD_BoltSpeed = float.Parse(line.Substring(15));
                             break;
-
                         case 59:
                             newAtt.BoltSpeed = float.Parse(line.Substring(17));
                             break;
@@ -1401,7 +1411,166 @@ namespace DataminingScript
                 Attachments.Add(newAtt);
             }
         }
-
+        static void AllowedAttachments(List<string> List_WeaponMonoPaths, List<string> List_AttachmentMonoPaths, string Monobehaviour_Location, List<string> AllowedAttachments1, List<Attachment> Attachments, List<string> AttachmentNames, List<string> AttachmentTypes)
+        {
+            bool FoundStringPermissions = false;
+            List<string> List_Attachment_PATH = new List<string>();
+            List<string> List_Attachment_GUID = new List<string>();
+            HashSet<string> GUIDHashSet = new HashSet<string>();
+            HashSet<string> PATHHashSet = new HashSet<string>();
+            foreach (string path in List_AttachmentMonoPaths)
+            {
+                foreach (string line in File.ReadLines(path + ".meta"))
+                {
+                    if (line.Contains("guid"))
+                    {
+                        List_Attachment_PATH.Add(path);
+                        List_Attachment_GUID.Add(line.Replace("guid: ", ""));
+                    }
+                }
+            }
+            foreach (string path in List_WeaponMonoPaths)
+            {
+                int i = 0;
+                foreach (string line in File.ReadLines(path))
+                {
+                    if (line.Contains("  AllowedAttachments:"))
+                    {
+                        FoundStringPermissions = true;
+                    }
+                    if (line.Contains("  Permissions:"))
+                    {
+                        FoundStringPermissions = false;
+                    }
+                    if (FoundStringPermissions && line.Contains("guid"))
+                    {
+                        GUIDHashSet.Add(line.Substring(31).Remove(32));
+                        PATHHashSet.Add(path);
+                    }
+                    if (FoundStringPermissions && !line.Contains("guid"))
+                    {
+                    }
+                }
+            }
+            foreach (string path in List_WeaponMonoPaths)
+            {
+                string WeaponName = Regex.Replace(path.Substring(Monobehaviour_Location.Length), @"^\d+_", "").Replace(".asset", "");
+                int type = 0;
+                int i = 0;
+                foreach (string line in File.ReadLines(path))
+                {
+                    if (line.Contains("  AllowedAttachments:")) //Start of attachments
+                    {
+                        FoundStringPermissions = true;
+                    }
+                    if (line.Contains("  Permissions:")) //End of attachments
+                    {
+                        FoundStringPermissions = false;
+                    }
+                    if (FoundStringPermissions && line.Contains("guid"))
+                    {
+                        foreach (string guid in List_Attachment_GUID)
+                        {
+                            if (line.Substring(31).Remove(32) == guid)
+                            { 
+                                string UnmodifiedAttachmentName = List_Attachment_PATH[i].Substring(Monobehaviour_Location.Length);
+                                string AttachmentName = Regex.Replace(UnmodifiedAttachmentName, @"^\d+_", "").Replace(".asset", "").Replace("_"," ").Replace("SE-5 Grip","SE-Grip").Replace("SDN-6 762","SDN-762").Replace("PTR-40 Hunter", "PTR-Hunter").Replace("NT-4 556", "NT-556").Replace("RK-6 Foregrip", "RK-Foregrip").Replace("F2000 Sight","FSight");
+                                Console.WriteLine(WeaponName);
+                                Console.WriteLine(AttachmentName);
+                                switch (type)
+                                {
+                                    
+                                    case 1:
+                                        {
+                                            AttachmentNames.Add(AttachmentName);
+                                            AttachmentTypes.Add("Scope");
+                                            break;
+                                        }
+                                    case 2:
+                                        {
+                                            AttachmentNames.Add(AttachmentName);
+                                            AttachmentTypes.Add("Barrel");
+                                            break;
+                                        }
+                                    case 3:
+                                        {
+                                            AttachmentNames.Add(AttachmentName);
+                                            AttachmentTypes.Add("Canted");
+                                            break;
+                                        }
+                                    case 4:
+                                        {
+                                            AttachmentNames.Add(AttachmentName);
+                                            AttachmentTypes.Add("Grip");
+                                            break;
+                                        }
+                                    case 5:
+                                        {
+                                            AttachmentNames.Add(AttachmentName);
+                                            AttachmentTypes.Add("Siderail");
+                                            break;
+                                        }
+                                    case 6:
+                                        {
+                                            AttachmentNames.Add(AttachmentName);
+                                            AttachmentTypes.Add("Bolt");
+                                            break;
+                                        }
+                                    case 7:
+                                        {
+                                            AttachmentNames.Add(AttachmentName);
+                                            AttachmentTypes.Add("Top Scope");
+                                            break;
+                                        }
+                                }
+                            }
+                            i++;
+                        }
+                        i = 0;
+                    }
+                    if (line.Contains("    mScopes:"))
+                    {
+                        type = 1;
+                    }
+                    if (line.Contains("    mBarrels:"))
+                    {
+                        type = 2;
+                    }
+                    if (line.Contains("    mCanteds:"))
+                    {
+                        type = 3;
+                    }
+                    if (line.Contains("    mUnderRails:"))
+                    {
+                        type = 4;
+                    }
+                    if (line.Contains("    mSideRails:"))
+                    {
+                        type = 5;
+                    }
+                    if (line.Contains("    mBoltActions:"))
+                    {
+                        type = 6;
+                    }
+                    if (line.Contains("    mTopSights:"))
+                    {
+                        type = 7;
+                    }
+                }
+            }  
+            foreach (var Attachment in Attachments)
+            {
+                int i = 0;
+                foreach (var Name in AttachmentNames)
+                {
+                    if (Attachment.AttachmentName.Contains(Name))
+                    {
+                        Attachment.AttachmentType = AttachmentTypes[i];
+                    }
+                    i++;
+                }    
+            }
+        }
         static void WriteCSV(string CSV_Location, string Gun_CSV_HEADER, string Attachment_CSV_HEADER, string MagazineCSV_HEADER, List<Gun> Guns, List<Attachment> Attachments, List<Magazine> Magazines)
         {
             //Writes CSV files containing weapon stats. "guns.csv" can be changed into anything you want, but it has to end with .csv
@@ -1411,10 +1580,9 @@ namespace DataminingScript
                 foreach (var gun in Guns)
                 {
                     //Comment out the version you don't use with "//"
-                    //comma version: INTO_CSV.WriteLine($"{gun.WeaponName},{gun.WeaponType},{gun.Level},{gun.InfantryDamage},{gun.LightDamage},{gun.HeavyDamage},{gun.VerticalRecoil},{gun.HorizontalRecoil},{gun.FirstShotKick},{gun.Velocity},{gun.Acc1},{gun.Acc2},{gun.Acc3},{gun.Acc4},{gun.Accuracy},{gun.Firerate},{gun.SoundSpread},{gun.MuzzleFlash},{gun.Control},{gun.Weight},{gun.AimDownTime},{gun.RunningSpeed},{gun.ReloadSpeed},{gun.Reload_time},{gun.ReloadFast_time},{gun.ReloadBolt_time},{gun.ReloadFastBolt_time},{gun.DrawSpeed},{gun.DrawIN_time},{gun.DrawOUT_time},{gun.BoltSpeed},{gun.DefaultMagazineSize},{gun.Key1Time},{gun.Key1Value},{gun.Key1InSlope},{gun.Key1OutSlope},{gun.Key1TangentMode},{gun.Key1WeightedMode},{gun.Key1InWeight},{gun.Key1OutWeight},{gun.Key2Time},{gun.Key2Value},{gun.Key2InSlope},{gun.Key2OutSlope},{gun.Key2TangentMode},{gun.Key2WeightedMode},{gun.Key2InWeight},{gun.Key2OutWeight},{gun.Key3Time},{gun.Key3Value},{gun.Key3InSlope},{gun.Key3OutSlope},{gun.Key3TangentMode},{gun.Key3WeightedMode},{gun.Key3InWeight},{gun.Key3OutWeight}");
-                    INTO_CSV.WriteLine($"{gun.WeaponName};{gun.WeaponType};{gun.Level};{gun.InfantryDamage};{gun.LightDamage};{gun.HeavyDamage};{gun.VerticalRecoil};{gun.HorizontalRecoil};{gun.FirstShotKick};{gun.Velocity};{gun.Acc1};{gun.Acc2};{gun.Acc3};{gun.Acc4};{gun.Accuracy};{gun.Firerate};{gun.SoundSpread};{gun.MuzzleFlash};{gun.Control};{gun.Weight};{gun.AimDownTime};{gun.RunningSpeed};{gun.ReloadSpeed};{gun.Reload_time};{gun.ReloadFast_time};{gun.ReloadBolt_time};{gun.ReloadFastBolt_time};{gun.DrawSpeed};{gun.DrawIN_time};{gun.DrawOUT_time};{gun.BoltSpeed};{gun.DefaultMagazineSize};{gun.Key1Time};{gun.Key1Value};{gun.Key1InSlope};{gun.Key1OutSlope};{gun.Key1TangentMode};{gun.Key1WeightedMode};{gun.Key1InWeight};{gun.Key1OutWeight};{gun.Key2Time};{gun.Key2Value};{gun.Key2InSlope};{gun.Key2OutSlope};{gun.Key2TangentMode};{gun.Key2WeightedMode};{gun.Key2InWeight};{gun.Key2OutWeight};{gun.Key3Time};{gun.Key3Value};{gun.Key3InSlope};{gun.Key3OutSlope};{gun.Key3TangentMode};{gun.Key3WeightedMode};{gun.Key3InWeight};{gun.Key3OutWeight}");
+                    //comma version: INTO_CSV.WriteLine($"{gun.WeaponName},{gun.WeaponType},{gun.Level},{gun.InfantryDamage},{gun.LightDamage},{gun.HeavyDamage},{gun.VerticalRecoil},{gun.HorizontalRecoil},{gun.FirstShotKick},{gun.Velocity},{gun.Acc1},{gun.Acc2},{gun.Acc3},{gun.Acc4},{gun.Accuracy},{gun.Firerate},{gun.SoundSpread},{gun.MuzzleFlash},{gun.MuzzleChance},{gun.Control},{gun.Weight},{gun.AimDownTime},{gun.RunningSpeed},{gun.ReloadSpeed},{gun.Reload_time},{gun.ReloadFast_time},{gun.ReloadBolt_time},{gun.ReloadFastBolt_time},{gun.DrawSpeed},{gun.DrawIN_time},{gun.DrawOUT_time},{gun.MagCheck_time},{gun.BoltSpeed},{gun.DefaultMagazineSize},{gun.Key1Time},{gun.Key1Value},{gun.Key1InSlope},{gun.Key1OutSlope},{gun.Key1TangentMode},{gun.Key1WeightedMode},{gun.Key1InWeight},{gun.Key1OutWeight},{gun.Key2Time},{gun.Key2Value},{gun.Key2InSlope},{gun.Key2OutSlope},{gun.Key2TangentMode},{gun.Key2WeightedMode},{gun.Key2InWeight},{gun.Key2OutWeight},{gun.Key3Time},{gun.Key3Value},{gun.Key3InSlope},{gun.Key3OutSlope},{gun.Key3TangentMode},{gun.Key3WeightedMode},{gun.Key3InWeight},{gun.Key3OutWeight},{gun.Headshot_Multiplier}");
+                    INTO_CSV.WriteLine($"{gun.WeaponName};{gun.WeaponType};{gun.Level};{gun.InfantryDamage};{gun.LightDamage};{gun.HeavyDamage};{gun.VerticalRecoil};{gun.HorizontalRecoil};{gun.FirstShotKick};{gun.Velocity};{gun.Acc1};{gun.Acc2};{gun.Acc3};{gun.Acc4};{gun.Accuracy};{gun.Firerate};{gun.SoundSpread};{gun.MuzzleFlash};{gun.MuzzleChance};{gun.Control};{gun.Weight};{gun.AimDownTime};{gun.RunningSpeed};{gun.ReloadSpeed};{gun.Reload_time};{gun.ReloadFast_time};{gun.ReloadBolt_time};{gun.ReloadFastBolt_time};{gun.DrawSpeed};{gun.DrawIN_time};{gun.DrawOUT_time};{gun.MagCheck_time};{gun.BoltSpeed};{gun.DefaultMagazineSize};{gun.Key1Time};{gun.Key1Value};{gun.Key1InSlope};{gun.Key1OutSlope};{gun.Key1TangentMode};{gun.Key1WeightedMode};{gun.Key1InWeight};{gun.Key1OutWeight};{gun.Key2Time};{gun.Key2Value};{gun.Key2InSlope};{gun.Key2OutSlope};{gun.Key2TangentMode};{gun.Key2WeightedMode};{gun.Key2InWeight};{gun.Key2OutWeight};{gun.Key3Time};{gun.Key3Value};{gun.Key3InSlope};{gun.Key3OutSlope};{gun.Key3TangentMode};{gun.Key3WeightedMode};{gun.Key3InWeight};{gun.Key3OutWeight};{gun.Key4Time};{gun.Key4Value};{gun.Key4InSlope};{gun.Key4OutSlope};{gun.Key4TangentMode};{gun.Key4WeightedMode};{gun.Key4InWeight};{gun.Key4OutWeight};{gun.Headshot_Multiplier}");
                 }
-
             }
             //Writes CSV files containing attachment stats. "attachments.csv" can be changed into anything you want, but it has to end with .csv
             using (var INTO_CSV = new StreamWriter(CSV_Location + "attachments.csv"))
@@ -1424,10 +1592,9 @@ namespace DataminingScript
                 {
                     //Comment out the version you don't use with "//"
                     //comma version: INTO_CSV.WriteLine($"{attachment.AttachmentName},,{attachment.InfantryDamage},{attachment.LightDamage},{attachment.HeavyDamage},{attachment.VerticalRecoil},{attachment.HorizontalRecoil},{attachment.FirstShotKick},{attachment.Velocity},{attachment.Accuracy},{attachment.Firerate},{attachment.SoundSpread},{attachment.MuzzleFlash},{attachment.Weight},{attachment.AimDownTime},{attachment.RunningSpeed},{attachment.ReloadSpeed},{attachment.DrawSpeed},{attachment.BoltSpeed}");
-                    INTO_CSV.WriteLine($"{attachment.AttachmentName};;{attachment.InfantryDamage};{attachment.LightDamage};{attachment.HeavyDamage};{attachment.VerticalRecoil};{attachment.HorizontalRecoil};{attachment.FirstShotKick};{attachment.Velocity};{attachment.Accuracy};{attachment.Firerate};{attachment.SoundSpread};{attachment.MuzzleFlash};{attachment.Weight};{attachment.AimDownTime};{attachment.RunningSpeed};{attachment.ReloadSpeed};{attachment.DrawSpeed};{attachment.BoltSpeed}");
+                    INTO_CSV.WriteLine($"{attachment.AttachmentName};{attachment.AttachmentType};{attachment.InfantryDamage};{attachment.LightDamage};{attachment.HeavyDamage};{attachment.VerticalRecoil};{attachment.HorizontalRecoil};{attachment.FirstShotKick};{attachment.Velocity};{attachment.Accuracy};{attachment.Firerate};{attachment.SoundSpread};{attachment.MuzzleFlash};{attachment.Weight};{attachment.AimDownTime};{attachment.RunningSpeed};{attachment.ReloadSpeed};{attachment.DrawSpeed};{attachment.BoltSpeed}");
                 }
             }
-
             //Writes CSV files containing magazine stats. "mags.csv" can be changed into anything you want, but it has to end with .csv
             using (var INTO_CSV = new StreamWriter(CSV_Location + "mags.csv"))
             {
@@ -1439,21 +1606,17 @@ namespace DataminingScript
                     INTO_CSV.WriteLine($"{magazine.WeaponName};{magazine.Name};{magazine.InfantryDamage};{magazine.LightDamage};{magazine.HeavyDamage};{magazine.VerticalRecoil};{magazine.HorizontalRecoil};{magazine.FirstShotKick};{magazine.Velocity};{magazine.Accuracy};{magazine.Firerate};{magazine.SoundSpread};{magazine.MuzzleFlash};{magazine.Weight};{magazine.AimDownTime};{magazine.RunningSpeed};{magazine.ReloadSpeed};{magazine.DrawSpeed};{magazine.BoltSpeed};{magazine.Ammo}");
                 }
             }
-
             //Writes CSV files containing attachment addition stats. "attachments.csv" can be changed into anything you want, but it has to end with .csv
             using (var INTO_CSV = new StreamWriter(CSV_Location + "ADD_attachments.csv"))
             {
                 INTO_CSV.WriteLine(Attachment_CSV_HEADER);
-
                 foreach (var attachment in Attachments)
                 {
                     //Comment out the version you don't use with "//"
                     //comma version: INTO_CSV.WriteLine($"{attachment.AttachmentName},,{attachment.ADD_InfantryDamage},{attachment.ADD_LightDamage},{attachment.ADD_HeavyDamage},{attachment.ADD_VerticalRecoil},{attachment.ADD_HorizontalRecoil},{attachment.ADD_FirstShotKick},{attachment.ADD_Velocity},{attachment.ADD_Accuracy},{attachment.ADD_Firerate},{attachment.ADD_SoundSpread},{attachment.ADD_MuzzleFlash},{attachment.ADD_Weight},{attachment.ADD_AimDownTime},{attachment.ADD_RunningSpeed},{attachment.ADD_ReloadSpeed},{attachment.ADD_DrawSpeed},{attachment.ADD_BoltSpeed}");
-                    INTO_CSV.WriteLine($"{attachment.AttachmentName};;{attachment.ADD_InfantryDamage};{attachment.ADD_LightDamage};{attachment.ADD_HeavyDamage};{attachment.ADD_VerticalRecoil};{attachment.ADD_HorizontalRecoil};{attachment.ADD_FirstShotKick};{attachment.ADD_Velocity};{attachment.ADD_Accuracy};{attachment.ADD_Firerate};{attachment.ADD_SoundSpread};{attachment.ADD_MuzzleFlash};{attachment.ADD_Weight};{attachment.ADD_AimDownTime};{attachment.ADD_RunningSpeed};{attachment.ADD_ReloadSpeed};{attachment.ADD_DrawSpeed};{attachment.ADD_BoltSpeed}");
+                    INTO_CSV.WriteLine($"{attachment.AttachmentName};{attachment.AttachmentType};{attachment.ADD_InfantryDamage};{attachment.ADD_LightDamage};{attachment.ADD_HeavyDamage};{attachment.ADD_VerticalRecoil};{attachment.ADD_HorizontalRecoil};{attachment.ADD_FirstShotKick};{attachment.ADD_Velocity};{attachment.ADD_Accuracy};{attachment.ADD_Firerate};{attachment.ADD_SoundSpread};{attachment.ADD_MuzzleFlash};{attachment.ADD_Weight};{attachment.ADD_AimDownTime};{attachment.ADD_RunningSpeed};{attachment.ADD_ReloadSpeed};{attachment.ADD_DrawSpeed};{attachment.ADD_BoltSpeed}");
                 }
             }
-
-
             //Writes CSV files containing magazine addition stats. "mags.csv" can be changed into anything you want, but it has to end with .csv
             using (var INTO_CSV = new StreamWriter(CSV_Location + "ADD_mags.csv"))
             {
