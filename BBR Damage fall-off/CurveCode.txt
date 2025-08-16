@@ -1,106 +1,208 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System.Linq;
+using System;
+using UnityEditor;
 
-public class Curve : MonoBehaviour
+public class Curve2 : MonoBehaviour
 {
+    public AnimationCurve curve;
+    Keyframe[] keyframes;
+    public string outputPath = "Damage Fall-off.csv"; // Path for the output CSV file
+    public string specificWeaponName = "SSG_69"; // Specify the weapon name you want to filter by
+    public bool processSpecificWeapon = false; // Toggle to process a specific weapon or all weapons
+    public string noFourthKeyframeValue = "404"; // Value indicating the absence of the fourth keyframe
 
-string filename = ""; 
-
-//Made By Ox1gen.
-//How to use, Input Keyframe values (X/Y, In/Out tangent/weight and WeightMode)
-//Save (CTRL+S) and Drag into Objects Components (Where AnimationCurves are made)
-//Press the "Play" Button.
-//Refresh Assets tab, a CSV file named "DMR_Values.CSV" should appear in the Assets tab.
-
-
-public AnimationCurve curve;
-
-    Keyframe[] ks = new Keyframe[3];
-    float[] Num = new float[1201];
-
-
-    public void Start()
+    private void Start()
     {
-        //Keyframe Coordinates and Values.
-        //IF Weighted mode is 2, then it's WeightedMode.Out
-        //IF Weighted mode is 0, then it's WeightedMode.None
-        filename = Application.dataPath + "/AK74.csv";
-        //1st Keyframe
-        ks[0] = new Keyframe(0f, 1f);     //Key1Time + Key1Value
-        ks[0].inTangent = 0f;             //Key1InSlope
-        ks[0].outTangent= 0f;             //Key1OutSlope
-        ks[0].weightedMode=WeightedMode.None; //Change WeightedMode ( None/0 | Out/2 )
-        ks[0].inWeight = 0f;              //Key1InWeight
-        ks[0].outWeight = 0f;             //Key1OutWeight
+        string path = Application.dataPath + "/newguns.csv";
+        List<string> texts = File.ReadAllLines(path).ToList();
+        texts.RemoveAt(0); // Remove the header line
 
+        List<string> ReadKeyframesValues = new List<string>();
 
-        //2nd Keyframe
-        ks[1] = new Keyframe(200f, 1f);
-        ks[1].inTangent = 0f; 
-        ks[1].outTangent= 0f; 
-        ks[1].weightedMode=WeightedMode.None; //Change WeightedMode ( None | Out )
-        ks[1].inWeight = 0f; 
-        ks[1].outWeight = 0f; 
-
-
-        //3rd Keyframe
-        ks[2] = new Keyframe(650f, 0.35f);
-        ks[2].inTangent = 0f;
-        ks[2].outTangent= 0f;
-        ks[2].weightedMode=WeightedMode.None; //Change WeightedMode ( None | Out )
-        ks[2].inWeight = 0f;
-        ks[2].outWeight = 0f;
-
-
-        curve = new AnimationCurve(ks);
-        
-        curve.preWrapMode = WrapMode.ClampForever;
-        curve.postWrapMode = WrapMode.ClampForever;
-       
-       //##############################################//
-     
-        
-        //CSV Write Start
-        
-        //Creates Evaluation based on Distance.
-        for(int Meter=0; Meter <= 1200;Meter++)
+        // Extract and process relevant columns from the CSV data
+        foreach (string line in texts)
         {
-            Num[Meter] = curve.Evaluate(Meter);
-            Debug.Log(Num[Meter]);
-        }
-        Debug.Log("Press Spacebar to Create/Update DMR_Values!");
-        //Name of the file where numbers go.
+            string s = "";
+            string[] TT = line.Split(";");
+
+            s = TT[0] + ";";
+            for (int i = 35; i < 67; i++) // Adjust range to include additional columns for the fourth keyframe
+            {
+                if (i == 66)
+                {
+                    s += TT[i];
+                }
+                else
+                    s += TT[i] + ";";
+
+            }
+            ReadKeyframesValues.Add(s);
+            //Debug.Log(s);
         }
 
-    void Update()
-    {   //Press spacebar to create/update Damage fall-off curve and CSV.
-        if(Input.GetKeyDown(KeyCode.Space))
+        Dictionary<string, List<float>> weaponEvaluations = new Dictionary<string, List<float>>();
+
+        // Process each line and create keyframes
+        foreach (string line in ReadKeyframesValues)
         {
-            WriteCSV();   
+            bool addFourthKeyframe = false;
+            string[] KF = line.Split(";");
+
+            string weaponName = KF[0];
+            //Debug.Log("KF0= "+KF[0]);
+            //If processing a specific weapon, skip others
+            if (processSpecificWeapon && weaponName != specificWeaponName)
+            {
+                continue;
+            }
+
+            List<float> values = new List<float>();
+
+            for (int i = 1; i < KF.Length; i++)
+            {
+                if (!string.IsNullOrEmpty(KF[i]) && float.TryParse(KF[i], out float value))
+                {
+                    values.Add(value);
+                    //Debug.Log(value);
+                }
+            }
+
+            // Determine if a fourth keyframe should be added
+            if (KF[25] != noFourthKeyframeValue)
+            {
+                addFourthKeyframe = true;
+                //Debug.Log(weaponName + " Value for 4th keyframe found");
+                //Debug.Log(KF[25]);
+            }
+            else
+            {
+                //Debug.Log("No value for 4th keyframe found");
+               // Debug.Log(KF[25]);
+            }
+
+            // Create keyframes with conditional fourth keyframe
+            if (addFourthKeyframe)
+            {
+                keyframes = new Keyframe[4];
+                Debug.Log("Values COUNT: " + values.Count);
+                keyframes[3] = new Keyframe(values[24], values[25], values[26], values[27])
+                {
+                    weightedMode = GetWeightedMode(values[28], values[29]),
+                    inWeight = values[30],
+                    outWeight = values[31]
+                };
+            }
+            else
+            {
+                keyframes = new Keyframe[3];
+            }
+
+            keyframes[0] = new Keyframe(values[0], values[1], values[2], values[3])
+            {
+                weightedMode = GetWeightedMode(values[4], values[5]),
+                inWeight = values[6],
+                outWeight = values[7]
+            };
+            keyframes[1] = new Keyframe(values[8], values[9], values[10], values[11])
+            {
+                weightedMode = GetWeightedMode(values[12], values[13]),
+                inWeight = values[14],
+                outWeight = values[15]
+            };
+            keyframes[2] = new Keyframe(values[16], values[17], values[18], values[19])
+            {
+                weightedMode = GetWeightedMode(values[20], values[21]),
+                inWeight = values[22],
+                outWeight = values[23]
+            };
+
+            // Create the curve with the new keyframes
+            curve = new AnimationCurve(keyframes);
+
+            // Log keyframe values for debugging
+            for (int i = 0; i < keyframes.Length; i++)
+            {
+                Keyframe kf = curve.keys[i];
+                //Debug.Log($"Verified PRETANGENTMODE - Weapon: {weaponName}, Keyframe {i}: Time = {kf.time}, Value = {kf.value}, InTangent = {kf.inTangent}, OutTangent = {kf.outTangent}, TangentMode = {kf.weightedMode}, InWeight = {kf.inWeight}, OutWeight = {kf.outWeight}");
+            }
+
+            // Update tangent modes manually (ensure to avoid redundant calls)
+            for (int i = 0; i < keyframes.Length; i++)
+            {
+                int tangentModeIndex = i * 8 + 4;
+                AnimationUtility.TangentMode tangentMode = (AnimationUtility.TangentMode)(int)values[tangentModeIndex];
+                Keyframe kf = curve.keys[i];
+                kf.inTangent = tangentMode == AnimationUtility.TangentMode.Linear ? 0f : kf.inTangent;
+                kf.outTangent = tangentMode == AnimationUtility.TangentMode.Linear ? 0f : kf.outTangent;
+                curve.MoveKey(i, kf); // Update the keyframe in the curve
+            }
+
+            // Verify the assigned values after setting tangent modes
+            for (int i = 0; i < keyframes.Length; i++)
+            {
+                Keyframe kf = curve.keys[i];
+                //Debug.Log($"Verified AFTERTANGENTMODE - Weapon: {weaponName}, Keyframe {i}: Time = {kf.time}, Value = {kf.value}, InTangent = {kf.inTangent}, OutTangent = {kf.outTangent}, TangentMode = {kf.weightedMode}, InWeight = {kf.inWeight}, OutWeight = {kf.outWeight}");
+            }
+
+            // Evaluate the curve and store results
+            List<float> evaluations = new List<float>();
+            for (int i = 0; i <= 2000; i++)
+            {
+                evaluations.Add(curve.Evaluate(i));
+            }
+
+            weaponEvaluations[weaponName] = evaluations;
         }
-       
-        transform.position = new Vector3(transform.position.x, curve.Evaluate(Time.time), transform.position.z);}
 
-    //Code for the writing CSV file.
-    public void WriteCSV()
-    {   
-        
-            TextWriter tw = new StreamWriter(filename, false);
-            tw.WriteLine("Distance; Value");
-            tw.Close();
-        
-            tw= new StreamWriter(filename, true);
+        // Save the evaluations to a CSV file
+        List<string> lines = new List<string>();
+        int maxEvaluations = weaponEvaluations.Values.FirstOrDefault()?.Count ?? 0;
+        lines.Add("Time;" + string.Join(";", weaponEvaluations.Keys));
 
-
-        for(int i=0; i<=1200; i++)
+        for (int i = 0; i <= maxEvaluations - 1; i++)
         {
-            //Replace ; with , if it doesn't come out as shown in the guide.
-            tw.WriteLine(i + ";"+ Num[i]);
+            List<string> values = new List<string> { i.ToString() };
+
+            foreach (var weapon in weaponEvaluations)
+            {
+                values.Add(weapon.Value.Count > i ? weapon.Value[i].ToString("F8") : "");
+            }
+
+            lines.Add(string.Join(";", values));
         }
-            tw.Close();
-            Debug.Log("DMR_Values.CSV CREATED/UPDATED! (REFRESH ASSETS TAB!)");
-        
+
+        string fullPath1 = Path.Combine(Application.dataPath, outputPath);
+        string fullPath2 = Path.Combine("C:\\Users\\kaspe\\Desktop\\BBR Ripperino\\CSV_CREATIONS", outputPath);
+        File.WriteAllText(fullPath1, string.Join(Environment.NewLine, lines));
+        File.WriteAllText(fullPath2, string.Join(Environment.NewLine, lines));
+        Debug.Log($"Curve evaluations saved to {fullPath1}");
+    }
+
+    private WeightedMode GetWeightedMode(float tangentMode, float weightedModeValue)
+    {
+        switch ((int)tangentMode)
+        {
+            case 0:
+                return WeightedMode.None;
+            case 1:
+                return WeightedMode.None; // Free tangents
+            case 5:
+                return WeightedMode.None; // Linear tangents
+            case 7:
+                return WeightedMode.None; // Constant tangents
+            case 65:
+                return (WeightedMode)1; // Right Linear
+            case 97:
+                return (WeightedMode)2; // Right Constant
+            case 69:
+                return (WeightedMode)3; // Both Linear
+            case 103:
+                return (WeightedMode)3; // Both Constant
+            default:
+                return (WeightedMode)weightedModeValue; // Custom weighted mode
+        }
     }
 }
