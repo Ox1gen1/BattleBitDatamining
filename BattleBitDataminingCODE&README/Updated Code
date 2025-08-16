@@ -1,0 +1,687 @@
+using AssetsTools.NET.Cpp2IL;
+using AssetsTools.NET.Extra;
+
+namespace BattleBitGDE
+{
+    public class Program
+    {
+        private static string BattleBit_path = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\BattleBit Remastered\\BattleBit_Data";
+        private static readonly AssetsManager manager = new();
+        private static readonly List<AssetsFileInstance> instances = new();
+
+        struct WeaponInformation
+        {
+            public string WeaponName;
+            public string WeaponType;
+            public int Level;
+            public float InfantryDamage;
+            public float LightDamage;
+            public float HeavyDamage;
+            public float VerticalRecoil;
+            public float HorizontalRecoil;
+            public float FirstShotKick;
+            public float Velocity;
+            public float Acc1;
+            public float Acc2;
+            public float Acc3;
+            public float Acc4;
+            public float Accuracy;
+            public float Firerate;
+            public float SoundSpread;
+            public float MuzzleFlash;
+            public float MuzzleChance;
+            public float Weight;
+            public float Control;
+            public float AimDownTime;
+            public float RunningSpeed;
+            public float ReloadSpeed;
+            public float Reload_time;
+            public float ReloadBolt_time;
+            public float ReloadFast_time;
+            public float ReloadFastBolt_time;
+            public float DrawIN_time;
+            public float DrawOUT_time;
+            public float MagCheck_time;
+            public float Bolt_Time;
+            public float DrawSpeed;
+            public float BoltSpeed;
+            public float DefaultMagazineSize;
+            public float Key1Time;
+            public float Key1Value;
+            public float Key1InSlope;
+            public float Key1OutSlope;
+            public float Key1TangentMode;
+            public float Key1WeightedMode;
+            public float Key1InWeight;
+            public float Key1OutWeight;
+            public float Key2Time;
+            public float Key2Value;
+            public float Key2InSlope;
+            public float Key2OutSlope;
+            public float Key2TangentMode;
+            public float Key2WeightedMode;
+            public float Key2InWeight;
+            public float Key2OutWeight;
+            public float Key3Time;
+            public float Key3Value;
+            public float Key3InSlope;
+            public float Key3OutSlope;
+            public float Key3TangentMode;
+            public float Key3WeightedMode;
+            public float Key3InWeight;
+            public float Key3OutWeight;
+            public float Key4Time;
+            public float Key4Value;
+            public float Key4InSlope;
+            public float Key4OutSlope;
+            public float Key4TangentMode;
+            public float Key4WeightedMode;
+            public float Key4InWeight;
+            public float Key4OutWeight;
+            public float Headshot_Multiplier;
+
+        };
+
+        struct AttachmentInformation
+        {
+            public string AttachmentName;
+            public string AttachmentType;
+            public float InfantryDamage;
+            public float LightDamage;
+            public float HeavyDamage;
+            public float VerticalRecoil;
+            public float HorizontalRecoil;
+            public float FirstShotKick;
+            public float Velocity;
+            public float Accuracy;
+            public float Firerate;
+            public float SoundSpread;
+            public float MuzzleFlash;
+            public float Weight;
+            public float AimDownTime;
+            public float RunningSpeed;
+            public float ReloadSpeed;
+            public float DrawSpeed;
+            public float BoltSpeed;
+            public float ADD_InfantryDamage;
+            public float ADD_LightDamage;
+            public float ADD_HeavyDamage;
+            public float ADD_VerticalRecoil;
+            public float ADD_HorizontalRecoil;
+            public float ADD_FirstShotKick;
+            public float ADD_Velocity;
+            public float ADD_Accuracy;
+            public float ADD_Firerate;
+            public float ADD_SoundSpread;
+            public float ADD_MuzzleFlash;
+            public float ADD_Weight;
+            public float ADD_AimDownTime;
+            public float ADD_RunningSpeed;
+            public float ADD_ReloadSpeed;
+            public float ADD_DrawSpeed;
+            public float ADD_BoltSpeed;
+        }
+
+        struct MagazineInformation
+        {
+            public string WeaponName;
+            public string Name;
+            public float InfantryDamage;
+            public float LightDamage;
+            public float HeavyDamage;
+            public float VerticalRecoil;
+            public float HorizontalRecoil;
+            public float FirstShotKick;
+            public float Velocity;
+            public float Accuracy;
+            public float Firerate;
+            public float SoundSpread;
+            public float MuzzleFlash;
+            public float Weight;
+            public float AimDownTime;
+            public float RunningSpeed;
+            public float ReloadSpeed;
+            public float DrawSpeed;
+            public float Ammo;
+            public float BoltSpeed;
+            public float ADD_InfantryDamage;
+            public float ADD_LightDamage;
+            public float ADD_HeavyDamage;
+            public float ADD_VerticalRecoil;
+            public float ADD_HorizontalRecoil;
+            public float ADD_FirstShotKick;
+            public float ADD_Velocity;
+            public float ADD_Accuracy;
+            public float ADD_Firerate;
+            public float ADD_SoundSpread;
+            public float ADD_MuzzleFlash;
+            public float ADD_Weight;
+            public float ADD_AimDownTime;
+            public float ADD_RunningSpeed;
+            public float ADD_ReloadSpeed;
+            public float ADD_DrawSpeed;
+            public float ADD_BoltSpeed;
+        }
+
+
+        private static WeaponInformation[] FindGunDataFromBundle(List<AssetsFileInstance> instances, List<WeaponInformation> weapons)
+        {
+            foreach (var file in instances)
+            {
+                WeaponInformation weapon = new();
+                weapon.Level = 404;
+                manager.LoadClassDatabaseFromPackage(file.file.Metadata.UnityVersion);
+                foreach (var monoInfo in file.file.GetAssetsOfType(AssetClassID.MonoBehaviour))
+                {
+                    try
+                    {
+                        //Resets Bolt_Time so it doesn't flood to later weapons that DON'T have bolting function.
+                        weapon.Bolt_Time = 0f;
+                        var monoBase = manager.GetBaseField(file, monoInfo);
+                        weapon.WeaponName = monoBase["m_Name"].AsString;
+
+                        //Excludes the EmptyGun file
+                        if (weapon.WeaponName != "0_EmptyGun")
+                        {
+                            //Differentiates weapon files from others
+                            int i = monoBase["WeaponType"].AsInt;
+                            switch (i)
+                            {
+                                case 0:
+                                    weapon.WeaponType = "AR";
+                                    weapon.Headshot_Multiplier = 1.5f; break;
+                                case 1:
+                                    weapon.WeaponType = "DMR";
+                                    weapon.Headshot_Multiplier = 1.5f; break;
+                                case 2:
+                                    weapon.WeaponType = "SNIPER";
+                                    weapon.Headshot_Multiplier = 1.9f; break;
+                                case 3:
+                                    weapon.WeaponType = "LSG";
+                                    weapon.Headshot_Multiplier = 1.5f; break;
+                                case 4:
+                                    weapon.WeaponType = "LMG";
+                                    weapon.Headshot_Multiplier = 1.5f; break;
+                                case 5:
+                                    weapon.WeaponType = "SMG";
+                                    weapon.Headshot_Multiplier = 1.2f; break;
+                                case 6:
+                                    weapon.WeaponType = "PISTOL";
+                                    weapon.Headshot_Multiplier = 1.2f; break;
+                                case 7:
+                                    weapon.WeaponType = "AUTOMATIC PISTOL";
+                                    weapon.Headshot_Multiplier = 1.2f; break;
+                                case 8:
+                                    weapon.WeaponType = "HEAVY PISTOL";
+                                    weapon.Headshot_Multiplier = 1.5f; break;
+                                case 9:
+                                    weapon.WeaponType = "CARBINE";
+                                    weapon.Headshot_Multiplier = 1.5f; break;
+                                case 10:
+                                    weapon.WeaponType = "PDW";
+                                    weapon.Headshot_Multiplier = 1.5f; break;
+                                case 11:
+                                    weapon.WeaponType = "BR";
+                                    weapon.Headshot_Multiplier = 1.5f; break;
+                            }
+                            var permissions = monoBase["Permissions"];
+                            var stats = monoBase["stats"];
+                            var DropOf = stats["DropOf"];
+                            var Stats = monoBase["Stats"];
+                            var Recoil = Stats["Recoil"];
+                            var Accuracy = Stats["Accuracy"];
+
+                            weapon.Level = permissions["RequiredRank"].AsInt;
+                            weapon.InfantryDamage = stats["DamageOnInfantryBody"].AsFloat;
+                            weapon.LightDamage = stats["DamageOnLightArmoredVehicles"].AsFloat;
+                            weapon.HeavyDamage = stats["DamageOnHeavyHeavyVehicles"].AsFloat;
+                            weapon.VerticalRecoil = Recoil["VerticalMouse"].AsFloat;
+                            weapon.HorizontalRecoil = Recoil["HorizontalMouse"].AsFloat;
+                            weapon.FirstShotKick = Recoil["FirstShotRecoil"].AsFloat;
+                            weapon.Velocity = stats["BulletVelocity"].AsFloat;
+                            weapon.Acc1 = Accuracy["BaseHipFireAccuracy"].AsFloat;
+                            weapon.Acc2 = Accuracy["LowestHipFireAccuracy"].AsFloat;
+                            weapon.Acc3 = Accuracy["BaseADSFireAccuracy"].AsFloat;
+                            weapon.Acc4 = Accuracy["LowestADSFireAccuracy"].AsFloat;
+                            weapon.Accuracy = (weapon.Acc1 + weapon.Acc2 + weapon.Acc3 + weapon.Acc4) / 4f;
+                            weapon.Firerate = Stats["RoundsPerMinute"].AsFloat;
+                            weapon.SoundSpread = Stats["ShotSoundDistance"].AsFloat;
+                            weapon.MuzzleFlash = Stats["MuzzleScale"].AsFloat;
+                            weapon.MuzzleChance = Stats["MuzzleChance"].AsFloat;
+                            weapon.Weight = Stats["Weigth"].AsFloat;
+                            weapon.Control = (-2f / 7f) * weapon.Weight + 8f / 7f;
+                            weapon.AimDownTime = Stats["AdsTime"].AsFloat;
+                            weapon.RunningSpeed = Stats["PlayerRunningSpeed"].AsFloat;
+                            weapon.ReloadSpeed = Stats["ReloadSpeed"].AsFloat;
+                            weapon.DrawSpeed = Stats["DrawSpeed"].AsFloat;
+                            weapon.BoltSpeed = Stats["BoltActionSpeed"].AsFloat;
+                            weapon.DefaultMagazineSize = monoBase["DefaultRoundsPerMagazine"].AsFloat;
+
+                            var dropCurve = stats["DropOf"]["m_Curve.Array"];
+                            int J = 0;
+                            int FourthKeycount = 0;
+
+                            foreach (var L in dropCurve)
+                            {
+                                //Used to check if there are more than 3 keyframes.
+                                for (int A = 0; A < L.Count(); A++)
+                                {
+                                    FourthKeycount++;
+                                }
+
+                                //TangentMode is funky, don't ask, unity magic.
+                                switch (J)
+                                {
+                                    case 0:
+
+                                        weapon.Key1Time = L["time"].AsFloat;
+                                        weapon.Key1Value = L["value"].AsFloat;
+                                        weapon.Key1InSlope = L["inSlope"].AsFloat;
+                                        weapon.Key1OutSlope = L["outSlope"].AsFloat;
+                                        //weapon.Key1TangentMode = L["tangentMode"].AsFloat;
+                                        weapon.Key1WeightedMode = L["weightedMode"].AsFloat;
+                                        weapon.Key1InWeight = L["inWeight"].AsFloat;
+                                        weapon.Key1OutWeight = L["outWeight"].AsFloat;
+                                        J++;
+                                        break;
+                                    case 1:
+                                        weapon.Key2Time = L["time"].AsFloat;
+                                        weapon.Key2Value = L["value"].AsFloat;
+                                        weapon.Key2InSlope = L["inSlope"].AsFloat;
+                                        weapon.Key2OutSlope = L["outSlope"].AsFloat;
+                                        //weapon.Key2TangentMode = L["tangentMode"].AsFloat;                                        
+                                        weapon.Key2WeightedMode = L["weightedMode"].AsFloat;
+                                        weapon.Key2InWeight = L["inWeight"].AsFloat;
+                                        weapon.Key2OutWeight = L["outWeight"].AsFloat;
+                                        J++;
+                                        break;
+                                    case 2:
+                                        weapon.Key3Time = L["time"].AsFloat;
+                                        weapon.Key3Value = L["value"].AsFloat;
+                                        weapon.Key3InSlope = L["inSlope"].AsFloat;
+                                        weapon.Key3OutSlope = L["outSlope"].AsFloat;
+                                        //weapon.Key3TangentMode = L["tangentMode"].AsFloat;                                        
+                                        weapon.Key3WeightedMode = L["weightedMode"].AsFloat;
+                                        weapon.Key3InWeight = L["inWeight"].AsFloat;
+                                        weapon.Key3OutWeight = L["outWeight"].AsFloat;
+                                        J++;
+                                        break;
+
+                                    case 3:
+                                        //Assumption is that in the future there will be a 4th keyframe used in damage fall-off graphs, currently doesn't make it to "case 3:" as none have 4 keyframes so this just exists for future.
+                                        Console.WriteLine("4th Keyframe!");
+                                        if (L["time"].AsFloat != 0 && L["value"].AsFloat != 0 && L["inSlope"].AsFloat != 0 && L["outSlope"].AsFloat != 0 && L["weightedMode"].AsFloat != 0 && L["inWeight"].AsFloat != 0 && L["outWeight"].AsFloat != 0)
+                                        {
+                                            weapon.Key4Time = L["time"].AsFloat;
+                                            weapon.Key4Value = L["value"].AsFloat;
+                                            weapon.Key4InSlope = L["inSlope"].AsFloat;
+                                            weapon.Key4OutSlope = L["outSlope"].AsFloat;
+                                            //weapon.Key4TangentMode = L["tangentMode"].AsFloat;                                        
+                                            weapon.Key4WeightedMode = L["weightedMode"].AsFloat;
+                                            weapon.Key4InWeight = L["inWeight"].AsFloat;
+                                            weapon.Key4OutWeight = L["outWeight"].AsFloat;
+                                            J++;
+                                            Console.WriteLine(weapon.WeaponName + ": 4th Keyframe FOUND");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine(weapon.WeaponName + ": 4th Keyframe NOT FOUND");
+                                            break;
+                                        }
+
+
+                                }
+                            }
+                            //If there are only 3 keyframes "FourthKeycount" will be 21 and it will set Key4 values as 404 so fall-off calculator knows there aren't 4 keyframes it needs to use in calculations.
+                            if (FourthKeycount == 21)
+                            {
+                                weapon.Key4Time = 404;
+                                weapon.Key4Value = 404;
+                                weapon.Key4InSlope = 404;
+                                weapon.Key4OutSlope = 404;
+                                weapon.Key4TangentMode = 404;
+                                weapon.Key4WeightedMode = 404;
+                                weapon.Key4InWeight = 404;
+                                weapon.Key4OutWeight = 404;
+                            }
+                            {
+
+                            }
+                            var prefab = manager.GetExtAsset(file, monoBase["LocalPrefabAsset"]);
+
+                            foreach (var component in prefab.baseField["m_Component.Array"])
+                            {
+                                var componentPointer = component["component"];
+                                var prefabFile = manager.GetExtAsset(file, componentPointer);
+                                var componentType = (AssetClassID)prefabFile.info.TypeId;
+
+                                // find the Animation component
+                                if (componentType == AssetClassID.Animation)
+                                {
+                                    foreach (var animation in prefabFile.baseField["m_Animations.Array"])
+                                    {
+
+                                        var clipFile = manager.GetExtAsset(file, animation);
+                                        var clipName = clipFile.baseField["m_Name"].AsString;
+
+                                        float time = 0;
+                                        foreach (var curve in clipFile.baseField["m_PositionCurves.Array"])
+                                        {
+                                            if (curve["path"].AsString == "Gun")
+                                            {
+                                                foreach (var c in curve["curve"]["m_Curve.Array"])
+                                                {
+                                                    if (time < c["time"].AsFloat)
+                                                        time = c["time"].AsFloat;
+                                                }
+                                            }
+                                        }
+
+                                        if (clipName == "Reload")
+                                        {
+                                            weapon.Reload_time = time / weapon.ReloadSpeed;
+                                        }
+                                        if (clipName == "ReloadBolt")
+                                        {
+                                            weapon.ReloadBolt_time = time / weapon.ReloadSpeed;
+                                        }
+                                        if (clipName == "ReloadFast")
+                                        {
+                                            weapon.ReloadFast_time = time / weapon.ReloadSpeed;
+                                        }
+                                        if (clipName == "ReloadFastBolt")
+                                        {
+                                            weapon.ReloadFastBolt_time = time / weapon.ReloadSpeed;
+                                        }
+                                        if (clipName == "ReloadFastBolt")
+                                        {
+                                            weapon.ReloadFastBolt_time = time / weapon.ReloadSpeed;
+                                        }
+                                        if (clipName == "DrawIn")
+                                        {
+                                            weapon.DrawIN_time = time / weapon.DrawSpeed;
+                                        }
+                                        if (clipName == "DrawOut")
+                                        {
+                                            weapon.DrawOUT_time = time / weapon.DrawSpeed;
+                                        }
+                                        if (clipName == "MagCheck")
+                                        {
+                                            weapon.MagCheck_time = time;
+                                        }
+                                        if (clipName == "FullAction")
+                                        {
+                                            weapon.Bolt_Time = (time / weapon.BoltSpeed);
+                                            weapon.Firerate = 60f / (time / weapon.BoltSpeed);
+
+                                        }
+                                    }
+                                }
+                            }
+                            //Separates/Removes "XXX_" from weapon name
+                            string[] output = weapon.WeaponName.Split(new[] { '_' }, 2);
+                            weapon.WeaponName = output.Length > 1 ? output[1] : weapon.WeaponName;
+
+                            weapons.Add(weapon);
+                        }
+                    }
+
+                    catch (Exception)
+                    {
+                        //...
+                        // Console.WriteLine(ex);
+                    }
+
+                }
+
+                manager.UnloadClassDatabase();
+            }
+
+            return [.. weapons];
+        }
+
+        private static MagazineInformation[] FindMagazineDataFromBundle(List<AssetsFileInstance> instances, List<MagazineInformation> magazines)
+        {
+
+
+            foreach (var file in instances)
+            {
+                MagazineInformation magazine = new();
+                manager.LoadClassDatabaseFromPackage(file.file.Metadata.UnityVersion);
+                foreach (var monoInfo in file.file.GetAssetsOfType(AssetClassID.MonoBehaviour))
+                {
+                    try
+                    {
+                        var monoBase = manager.GetBaseField(file, monoInfo);
+                        magazine.WeaponName = monoBase["m_Name"].AsString;
+                        //Excludes the EmptyGun file
+                        if (magazine.WeaponName != "0_EmptyGun")
+                        {
+                            string[] output = magazine.WeaponName.Split(new[] { '_' }, 2);
+                            magazine.WeaponName = output.Length > 1 ? output[1] : magazine.WeaponName;
+
+                            //Differentiates weapon files from others
+                            int i = monoBase["WeaponType"].AsInt;
+                            var Mags = monoBase["Magazines.Array"];
+                            foreach (var m in Mags)
+                            {
+                                //Console.WriteLine(MA["ReloadSpeed"]["Multiplier"].AsString);
+                                var MA = m["Settings"];
+                                magazine.Name = m["MagName"].AsString;
+                                magazine.Ammo = m["newAmmoCount"].AsFloat;
+                                magazine.ReloadSpeed = MA["ReloadSpeed"]["Multiplier"].AsFloat; magazine.ADD_ReloadSpeed = MA["ReloadSpeed"]["Addition"].AsFloat;
+                                magazine.DrawSpeed = MA["DrawSpeed"]["Multiplier"].AsFloat; magazine.ADD_DrawSpeed = MA["DrawSpeed"]["Addition"].AsFloat;
+                                magazine.AimDownTime = MA["AimDownTime"]["Multiplier"].AsFloat; magazine.ADD_AimDownTime = MA["AimDownTime"]["Addition"].AsFloat;
+                                magazine.Weight = MA["SwayWeigth"]["Multiplier"].AsFloat; magazine.ADD_Weight = MA["SwayWeigth"]["Addition"].AsFloat;
+                                magazine.RunningSpeed = MA["RunningSpeed"]["Multiplier"].AsFloat; magazine.ADD_RunningSpeed = MA["RunningSpeed"]["Addition"].AsFloat;
+                                magazine.VerticalRecoil = MA["VerticalRecoil"]["Multiplier"].AsFloat; magazine.ADD_VerticalRecoil = MA["VerticalRecoil"]["Addition"].AsFloat;
+                                magazine.HorizontalRecoil = MA["HorizontalRecoil"]["Multiplier"].AsFloat; magazine.ADD_HorizontalRecoil = MA["HorizontalRecoil"]["Addition"].AsFloat;
+                                magazine.FirstShotKick = MA["FirstShotRecoil"]["Multiplier"].AsFloat; magazine.ADD_FirstShotKick = MA["FirstShotRecoil"]["Addition"].AsFloat;
+                                magazine.Firerate = MA["Firerate"]["Multiplier"].AsFloat; magazine.ADD_Firerate = MA["Firerate"]["Addition"].AsFloat;
+                                magazine.SoundSpread = MA["GunShotSoundDistance"]["Multiplier"].AsFloat; magazine.ADD_SoundSpread = MA["GunShotSoundDistance"]["Addition"].AsFloat;
+                                magazine.MuzzleFlash = MA["MuzzleScale"]["Multiplier"].AsFloat; magazine.ADD_MuzzleFlash = MA["MuzzleScale"]["Addition"].AsFloat;
+                                magazine.Velocity = MA["ProjectileVelocity"]["Multiplier"].AsFloat; magazine.ADD_Velocity = MA["ProjectileVelocity"]["Addition"].AsFloat;
+                                magazine.Accuracy = MA["ProjectileAccuracy"]["Multiplier"].AsFloat; magazine.ADD_Accuracy = MA["ProjectileAccuracy"]["Addition"].AsFloat;
+                                magazine.InfantryDamage = MA["ProjectileBodyDamage"]["Multiplier"].AsFloat; magazine.ADD_InfantryDamage = MA["ProjectileBodyDamage"]["Addition"].AsFloat;
+                                magazine.BoltSpeed = MA["BoltActionSpeed"]["Multiplier"].AsFloat; magazine.ADD_BoltSpeed = MA["BoltActionSpeed"]["Addition"].AsFloat;
+                                magazines.Add(magazine);
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        //...
+                        // Console.WriteLine(ex);
+                    }
+
+                }
+                manager.UnloadClassDatabase();
+            }
+            return [.. magazines];
+        }
+
+        private static AttachmentInformation[] FindAttachmentDataFromBundle(List<AssetsFileInstance> instances, List<AttachmentInformation> attachments)
+        {
+            foreach (var file in instances)
+            {
+                manager.LoadClassDatabaseFromPackage(file.file.Metadata.UnityVersion);
+                foreach (var monoInfo in file.file.GetAssetsOfType(AssetClassID.MonoBehaviour))
+                {
+                    AttachmentInformation attachment = new();
+                    try
+                    {
+                        var monoBase = manager.GetBaseField(file, monoInfo);
+                        attachment.AttachmentName = monoBase["m_Name"].AsString;
+                        string[] output = attachment.AttachmentName.Split(new[] { '_' }, 2);
+                        attachment.AttachmentName = output.Length > 1 ? output[1] : attachment.AttachmentName;
+
+                        //Differentiates attachment files from others
+                        int i = monoBase["Pistol_Kills"].AsInt;
+
+                        var Settings = monoBase["Settings"];
+                        //Console.WriteLine(attachment.AttachmentName);
+                        attachment.ReloadSpeed = Settings["ReloadSpeed"]["Multiplier"].AsFloat; attachment.ADD_ReloadSpeed = Settings["ReloadSpeed"]["Addition"].AsFloat;
+                        attachment.DrawSpeed = Settings["DrawSpeed"]["Multiplier"].AsFloat; attachment.ADD_DrawSpeed = Settings["DrawSpeed"]["Addition"].AsFloat;
+                        attachment.AimDownTime = Settings["AimDownTime"]["Multiplier"].AsFloat; attachment.ADD_AimDownTime = Settings["AimDownTime"]["Addition"].AsFloat;
+                        attachment.Weight = Settings["SwayWeigth"]["Multiplier"].AsFloat; attachment.ADD_Weight = Settings["SwayWeigth"]["Addition"].AsFloat;
+                        attachment.RunningSpeed = Settings["RunningSpeed"]["Multiplier"].AsFloat; attachment.ADD_RunningSpeed = Settings["RunningSpeed"]["Addition"].AsFloat;
+                        attachment.VerticalRecoil = Settings["VerticalRecoil"]["Multiplier"].AsFloat; attachment.ADD_VerticalRecoil = Settings["VerticalRecoil"]["Addition"].AsFloat;
+                        attachment.HorizontalRecoil = Settings["HorizontalRecoil"]["Multiplier"].AsFloat; attachment.ADD_HorizontalRecoil = Settings["HorizontalRecoil"]["Addition"].AsFloat;
+                        attachment.FirstShotKick = Settings["FirstShotRecoil"]["Multiplier"].AsFloat; attachment.ADD_FirstShotKick = Settings["FirstShotRecoil"]["Addition"].AsFloat;
+                        attachment.Firerate = Settings["Firerate"]["Multiplier"].AsFloat; attachment.ADD_Firerate = Settings["Firerate"]["Addition"].AsFloat;
+                        attachment.SoundSpread = Settings["GunShotSoundDistance"]["Multiplier"].AsFloat; attachment.ADD_SoundSpread = Settings["GunShotSoundDistance"]["Addition"].AsFloat;
+                        attachment.MuzzleFlash = Settings["MuzzleScale"]["Multiplier"].AsFloat; attachment.ADD_MuzzleFlash = Settings["MuzzleScale"]["Addition"].AsFloat;
+                        attachment.Velocity = Settings["ProjectileVelocity"]["Multiplier"].AsFloat; attachment.ADD_Velocity = Settings["ProjectileVelocity"]["Addition"].AsFloat;
+                        attachment.Accuracy = Settings["ProjectileAccuracy"]["Multiplier"].AsFloat; attachment.ADD_Accuracy = Settings["ProjectileAccuracy"]["Addition"].AsFloat;
+                        attachment.InfantryDamage = Settings["ProjectileBodyDamage"]["Multiplier"].AsFloat; attachment.ADD_InfantryDamage = Settings["ProjectileBodyDamage"]["Addition"].AsFloat;
+                        attachment.BoltSpeed = Settings["BoltActionSpeed"]["Multiplier"].AsFloat; attachment.ADD_BoltSpeed = Settings["BoltActionSpeed"]["Addition"].AsFloat;
+
+                        //Bolts don't seem to have a prefab file, which is why we use the name of the file to determine type 
+                        if (attachment.AttachmentName.Contains("Bolt"))
+                        {
+                            attachment.AttachmentType = "Bolt";
+                        }
+
+                        var prefab = manager.GetExtAsset(file, monoBase["PrefabAsset"]);
+                        foreach (var component in prefab.baseField["m_Component.Array"])
+                        {
+                            var componentPointer = component["component"];
+                            var prefabFile = manager.GetExtAsset(file, componentPointer);
+                            var componentType = (AssetClassID)prefabFile.info.TypeId;
+
+                            // find the MonoBehaviour component
+                            if (componentType == AssetClassID.MonoBehaviour)
+                            {
+                                foreach (var Script in prefabFile.baseField["m_Script"])
+                                {
+                                    //m_Script values are used to identify attachment type
+                                    switch (Script.AsInt)
+                                    {
+                                        //Scopes and Top Scopes have the same identifying value so we separate by name
+                                        case 3115:
+                                            if (attachment.AttachmentName.Contains("Top"))
+                                            {
+                                                //Console.WriteLine("Top Scope:  " + attachment.AttachmentName);
+                                                attachment.AttachmentType = "Top Scope";
+                                            }
+                                            else
+                                            {
+                                                //Console.WriteLine("Scope:  " + attachment.AttachmentName);
+                                                attachment.AttachmentType = "Scope";
+                                            }
+                                            break;
+                                        case 3363:
+                                            //Console.WriteLine("Barrel:  "+attachment.AttachmentName);
+                                            attachment.AttachmentType = "Barrel";
+                                            break;
+                                        case 2923:
+                                            //Console.WriteLine("Side:  "+attachment.AttachmentName);
+                                            attachment.AttachmentType = "Siderail";
+                                            break;
+                                        case 1480:
+                                            //Console.WriteLine("Canted:  "+attachment.AttachmentName);
+                                            attachment.AttachmentType = "Canted";
+                                            break;
+                                        case 2096:
+                                            //Console.WriteLine("Grip:  "+attachment.AttachmentName);
+                                            attachment.AttachmentType = "Grip";
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                        attachments.Add(attachment);
+                    }
+
+                    catch (Exception)
+                    {
+                        //...
+                        // Console.WriteLine(ex);
+                    }
+
+                }
+                manager.UnloadClassDatabase();
+            }
+            return [.. attachments];
+        }
+        static void csvWriter(List<WeaponInformation> weapons, List<MagazineInformation> magazines, List<AttachmentInformation> attachments)
+        {
+            string csv_path = "C:\\Users\\kaspe\\Desktop\\BBR Ripperino\\CSV_CREATIONS";
+            string gun_Header = "Name;Type;Level;Damage;Light Damage;Heavy Damage;Vert Recoil;Hor Recoil;First Shot Kick;Velocity;BaseHipFireAccuracy;LowestHipFireAccuracy;BaseADSFireAccuracy;LowestADSFireAccuracy;Accuracy;Firerate;Sound Spread;Muzzle Flash;Muzzle Chance;Control;Weight;ADS;Running Speed;Reload Speed;Reload;Drop Reload;Empty Reload;Empty Drop Reload;Bolt Time;Draw Speed;DrawIN;DrawOUT;MagCheck;Bolt Speed;Magazine Size;Key1Time;Key1Value;Key1InSlope;Key1OutSlope;Key1TangentMode;Key1WeightedMode;Key1InWeight;Key1OutWeight;Fall-off START;Key2Value;Key2InSlope;Key2OutSlope;Key2TangentMode;Key2WeightedMode;Key2InWeight;Key2OutWeight;Fall-off END;Min Damage;Key3InSlope;Key3OutSlope;Key3TangentMode;Key3WeightedMode;Key3InWeight;Key3OutWeight;Key4Time;Key4Value;Key4InSlope;Key4OutSlope;Key4TangentMode;Key4WeightedMode;Key4InWeight;Key4OutWeight;Headshot multiplier";
+            string mag_Header = "Gun;Magazine;Damage;Light Damage;Heavy Damage;Vert Recoil;Hor Recoil;First Shot Kick;Velocity;Accuracy;Firerate;Sound Spread;Muzzle Flash;Control;ADS;Running Speed;Reload Speed;Draw Speed;Bolt Speed;Magazine Size";
+            string Att_Header = "Attachment;Type;Damage;Light Damage;Heavy Damage;Vert Recoil;Hor Recoil;First Shot Kick;Velocity;Accuracy;Firerate;Sound Spread;Muzzle Flash;Control;ADS;Running Speed;Reload Speed;Draw Speed;Bolt Speed";
+
+            using (var sw = new StreamWriter(csv_path + "\\newGuns.csv"))
+            {
+                sw.WriteLine(gun_Header);
+                foreach (var w in weapons)
+                {
+                    sw.WriteLine($"{w.WeaponName};{w.WeaponType};{w.Level};{w.InfantryDamage};{w.LightDamage};{w.HeavyDamage};{w.VerticalRecoil};{w.HorizontalRecoil};{w.FirstShotKick};{w.Velocity};{w.Acc1};{w.Acc2};{w.Acc3};{w.Acc4};{w.Accuracy};{w.Firerate};{w.SoundSpread};{w.MuzzleFlash};{w.MuzzleChance};{w.Control};{w.Weight};{w.AimDownTime};{w.RunningSpeed};{w.ReloadSpeed};{w.Reload_time};{w.ReloadFast_time};{w.ReloadBolt_time};{w.ReloadFastBolt_time};{w.Bolt_Time};{w.DrawSpeed};{w.DrawIN_time};{w.DrawOUT_time};{w.MagCheck_time};{w.BoltSpeed};{w.DefaultMagazineSize};{w.Key1Time};{w.Key1Value};{w.Key1InSlope};{w.Key1OutSlope};{w.Key1TangentMode};{w.Key1WeightedMode};{w.Key1InWeight};{w.Key1OutWeight};{w.Key2Time};{w.Key2Value};{w.Key2InSlope};{w.Key2OutSlope};{w.Key2TangentMode};{w.Key2WeightedMode};{w.Key2InWeight};{w.Key2OutWeight};{w.Key3Time};{w.Key3Value};{w.Key3InSlope};{w.Key3OutSlope};{w.Key3TangentMode};{w.Key3WeightedMode};{w.Key3InWeight};{w.Key3OutWeight};{w.Key4Time};{w.Key4Value};{w.Key4InSlope};{w.Key4OutSlope};{w.Key4TangentMode};{w.Key4WeightedMode};{w.Key4InWeight};{w.Key4OutWeight};{w.Headshot_Multiplier}");
+                }
+            }
+            using (var sw = new StreamWriter(csv_path + "\\newMags.csv"))
+            {
+                sw.WriteLine(mag_Header);
+                foreach (var m in magazines)
+                {
+                    sw.WriteLine($"{m.WeaponName};{m.Name};{m.InfantryDamage};{m.LightDamage};{m.HeavyDamage};{m.VerticalRecoil};{m.HorizontalRecoil};{m.FirstShotKick};{m.Velocity};{m.Accuracy};{m.Firerate};{m.SoundSpread};{m.MuzzleFlash};{m.Weight};{m.AimDownTime};{m.RunningSpeed};{m.ReloadSpeed};{m.DrawSpeed};{m.BoltSpeed};{m.Ammo}");
+                }
+            }
+            using (var sw = new StreamWriter(csv_path + "\\newAttachments.csv"))
+            {
+                sw.WriteLine(Att_Header);
+                foreach (var a in attachments)
+                {
+                    sw.WriteLine($"{a.AttachmentName};{a.AttachmentType};{a.InfantryDamage};{a.LightDamage};{a.HeavyDamage};{a.VerticalRecoil};{a.HorizontalRecoil};{a.FirstShotKick};{a.Velocity};{a.Accuracy};{a.Firerate};{a.SoundSpread};{a.MuzzleFlash};{a.Weight};{a.AimDownTime};{a.RunningSpeed};{a.ReloadSpeed};{a.DrawSpeed};{a.BoltSpeed}");
+                }
+            }
+            using (var sw = new StreamWriter(csv_path + "\\newADDMags.csv"))
+            {
+                sw.WriteLine(mag_Header);
+                foreach (var m in magazines)
+                {
+                    sw.WriteLine($"{m.WeaponName};{m.Name};{m.ADD_InfantryDamage};{m.ADD_LightDamage};{m.ADD_HeavyDamage};{m.ADD_VerticalRecoil};{m.ADD_HorizontalRecoil};{m.ADD_FirstShotKick};{m.ADD_Velocity};{m.ADD_Accuracy};{m.ADD_Firerate};{m.ADD_SoundSpread};{m.ADD_MuzzleFlash};{m.ADD_Weight};{m.ADD_AimDownTime};{m.ADD_RunningSpeed};{m.ADD_ReloadSpeed};{m.ADD_DrawSpeed};{m.ADD_BoltSpeed}");
+                }
+            }
+            using (var sw = new StreamWriter(csv_path + "\\newADDAttachments.csv"))
+            {
+                sw.WriteLine(Att_Header);
+                foreach (var a in attachments)
+                {
+                    sw.WriteLine($"{a.AttachmentName};{a.AttachmentType};{a.ADD_InfantryDamage};{a.ADD_LightDamage};{a.ADD_HeavyDamage};{a.ADD_VerticalRecoil};{a.ADD_HorizontalRecoil};{a.ADD_FirstShotKick};{a.ADD_Velocity};{a.ADD_Accuracy};{a.ADD_Firerate};{a.ADD_SoundSpread};{a.ADD_MuzzleFlash};{a.ADD_Weight};{a.ADD_AimDownTime};{a.ADD_RunningSpeed};{a.ADD_ReloadSpeed};{a.ADD_DrawSpeed};{a.ADD_BoltSpeed}");
+                }
+            }
+        }
+
+        public static void Main(string[] args)
+        {
+            List<WeaponInformation> weapons = [];
+            List<MagazineInformation> magazines = [];
+            List<AttachmentInformation> attachments = [];
+            manager.LoadClassPackage("uncompressed.tpk");
+
+            FindCpp2IlFilesResult il2cppFiles = FindCpp2IlFiles.Find(BattleBit_path);
+            if (il2cppFiles.success)
+            {
+                manager.MonoTempGenerator = new Cpp2IlTempGenerator(il2cppFiles.metaPath, il2cppFiles.asmPath);
+            }
+
+            string[] assetBundles = [.. Directory.GetFiles(BattleBit_path).Where(s => s.EndsWith(".assets") || s.StartsWith("level"))];
+            Console.WriteLine("Bundle count: {0}", assetBundles.Length);
+
+
+            foreach (var bundlePath in assetBundles)
+            {
+                var file = manager.LoadAssetsFile(bundlePath, true);
+                instances.Add(file);
+            }
+
+            var result1 = FindGunDataFromBundle(instances, weapons);
+            var result2 = FindMagazineDataFromBundle(instances, magazines);
+            var result3 = FindAttachmentDataFromBundle(instances, attachments);
+            csvWriter(weapons, magazines, attachments);
+
+        }
+    }
+}
